@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.interest.dao.MsgRecordsDao">
+    <resultMap id="msgRecordMap"
+               type="com.interest.model.entity.MsgRecordEntity">
+        <id column="id" property="id"/>
+        <result column="ownerid" property="ownerid"/>
+        <result column="reply_card_id" property="replyCardId"/>
+        <result column="replytime" property="replytime"/>
+        <result column="isread" property="isread"/>
+        <result column="form" property="form"/>
+        <result column="comment_id" property="commentId"/>
+    </resultMap>
+
+    <resultMap id="msgModelMap"
+               type="com.interest.model.response.MsgRecordResponse">
+        <id column="id" property="id"/>
+        <result column="ownerid" property="ownerid"/>
+        <result column="reply_card_id" property="replyCardId"/>
+        <result column="replytime" property="replytime"/>
+        <result column="isread" property="isread"/>
+        <result column="replyUserid" property="replyUserid"/>
+        <result column="replyUserHeadimg" property="replyUserHeadimg"/>
+        <result column="replyUsername" property="replyUsername"/>
+        <result column="replyContent" property="replyContent"/>
+        <result column="title" property="title"/>
+        <result column="form" property="form"/>
+        <result column="comment_id" property="commentId"/>
+        <result column="to_id" property="toId"/>
+    </resultMap>
+
+    <insert id="addMsg" parameterType="MsgRecordEntity">
+		insert into msg_records(ownerid, form, comment_id, reply_card_id, replytime, isread)
+			values(#{ownerid}, #{form}, #{commentId}, #{replyCardId}, #{replytime}, #{isread});
+	</insert>
+
+
+    <select id="getUnreadMsgCount" parameterType="Integer" resultType="int">
+        select count(1) from msg_records
+        <where>
+            ownerid = #{userid} and isread = 0
+        </where>
+    </select>
+
+    <select id="getMsgListByUserid" resultMap="msgModelMap">
+        select a.*,b.content replyContent,c.id replyUserid,c.headimg replyUserHeadimg,c.name replyUsername,d.title title,d.id to_id
+        from msg_records a
+        left join reply_card b on a.reply_card_id = b.id
+        left join sys_user c on b.userid = c.id
+        left join post_card d on b.postcardid = d.id
+        <where>
+            a.ownerid = #{userid} and a.form = 0
+        </where>
+        union all
+        select a.*,b.comment replyContent,c.id replyUserid,c.headimg replyUserHeadimg,c.name replyUsername,d.title title,d.id to_id
+        from msg_records a
+        left join article_comment b on a.comment_id = b.id
+        left join sys_user c on b.userid = c.id
+        left join article d on b.articleid = d.id
+        <where>
+            a.ownerid = #{userid} and a.form = 1
+        </where>
+        order by replytime desc
+        limit #{start},#{pageSize}
+    </select>
+
+    <select id="getMsgSizeByUserid" resultType="Integer">
+        select count(1) from msg_records
+        <where>
+            ownerid = #{userid}
+        </where>
+    </select>
+
+    <update id="updateMsgRecordIsread">
+        update msg_records set isread = #{isread}
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+</mapper>
