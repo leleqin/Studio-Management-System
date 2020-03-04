@@ -16,8 +16,8 @@
           </div>
           <div class="user-location cotent-form">
             <Icon class="icon" type="ios-locate-outline"></Icon>
-            <span class="span-line-feed">{{userInfo.location}}</span>
-            <span v-if="userInfo.location == null ||userInfo.location == ''" class="span-default">未填写......</span>
+            <span class="span-line-feed">{{userInfo.workspaceName}}</span>
+            <span v-if="userInfo.workspaceName == null ||userInfo.workspaceName == ''" class="span-default">未填写......</span>
           </div>
           <div class="user-url cotent-form">
             <Icon class="icon" type="ios-link" />
@@ -128,7 +128,8 @@ export default {
     		email:null,
     		info:null,
     		location:null,
-    		skill:null
+        skill:null,
+        workspaceName: null
     	},
       articleList: [],
       total: 0,
@@ -153,7 +154,8 @@ export default {
   		this.userInfo.email = e.email;
   		this.userInfo.info = e.info;
   		this.userInfo.location = e.location;
-  		this.userInfo.skill = e.skill;
+      this.userInfo.skill = e.skill;
+      this.userInfo.workspaceName = e.workspaceName;
   	},
   	getUserInfo(){
   		this.axios({

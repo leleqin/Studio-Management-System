@@ -3,6 +3,7 @@ package com.interest.service.impl;
 import com.interest.dao.RelationDao;
 import com.interest.dao.UserDao;
 import com.interest.model.entity.RelationEntity;
+import com.interest.model.entity.SignInEntity;
 import com.interest.model.entity.UserEntity;
 import com.interest.model.ordinary.UserIdHeadImg;
 import com.interest.model.request.UserInfoRequest;
@@ -81,6 +82,7 @@ public class UserServiceImpl implements UserService {
 		}*/
         //userEntity.setPassword(new Md5PasswordEncoder().encodePassword(userEntity.getPassword(), null));
         userEntity.setPassword("{bcrypt}" + new BCryptPasswordEncoder().encode(userEntity.getPassword()));
+        System.out.println(userEntity.getPassword());
         userDao.insertUser(userEntity);
     }
 
@@ -173,5 +175,6 @@ public class UserServiceImpl implements UserService {
         String url = pathsProperties.getDomainName()+"/page/user/"+id;
         userDao.updateUserUrlById(id,url);
     }
+
 
 }

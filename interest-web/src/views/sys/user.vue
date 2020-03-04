@@ -1,66 +1,161 @@
 <style scoped>
-  .operation-button{
-    margin-right: 3px;
-  }
+.operation-button {
+  margin-right: 3px;
+}
 </style>
 <template>
-	<div style="margin: 20px;">
-        <div>
-            <Row style="margin-bottom: 25px;">
-                <Col span="8">用户名：
-                	<Input v-model="name" placeholder="请输入..." style="width:200px" />
-                </Col>
-                <Col span="8"><Button type="primary" shape="circle" icon="ios-search" @click="search()">搜索</Button></Col>
-            </Row>
-        </div>            
-        <div>
-            <ul>
-                <li>
-                    <Button class="operation-button" type="success" icon="md-build" @click="openModifyModal()">修改</Button>
-                    <Button type="error" icon="md-trash" @click="del()">删除</Button>
-                </li>
-                <li>
-                    <div style="padding: 10px 0;">
-                    	<Table border :columns="columns1" :data="data1" :height="400" @on-selection-change="s=>{change(s)}" @on-row-dblclick="s=>{dblclick(s)}"></Table>
-                    </div> 
-                </li>
-                <li>
-                    <div style="text-align: right;">
-                        <Page :total="total" :page-size="pageInfo.pageSize" show-elevator show-total @on-change="e=>{pageSearch(e)}"></Page>
-                    </div>  
-                </li>
-            </ul>
-        </div>
-        <!--修改modal-->  
-        <Modal :mask-closable="false" :visible.sync="modifyModal" v-model="modifyModal" width="600" title="修改" @on-ok="modifyOk()" @on-cancel="cancel()">
-             <Form :label-width="80" >
-                <Row>
-                    <Col span="12">
-                        <Form-item label="登录名:">
-                            <Input v-model="userModify.name" style="width: 204px" disabled="disabled" />
-                        </Form-item>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span="12">
-                        <Form-item label="用户类型:">
-                            <Select v-model="userModify.usertype" style="width:200px">
-                                <Option  :value="0">普通用户</Option>
-                                <Option  :value="1">管理员</Option>
-                            </Select>
-                            <!-- <Input v-model="userModify.email" style="width: 204px"/> -->
-                        </Form-item>
-                    </Col>
-                </Row>
-            </Form>
-        </Modal>
-        <!--配置角色modal-->  
-        <Modal v-model="roleModal" width="500" title="角色配置" @on-ok="roleOk()" @on-cancel="cancel()">
-            <div>
-                <Table border :columns="columns2" :data="data2" :height="260"  @on-selection-change="s=>{change2(s)}"></Table>
-            </div>
-        </Modal>
+  <div style="margin: 20px;">
+    <div>
+      <Row style="margin-bottom: 25px;">
+        <Col span="8">
+          用户名：
+          <Input v-model="name" placeholder="请输入..." style="width:200px" />
+        </Col>
+        <Col span="8">
+          <Button type="primary" shape="circle" icon="ios-search" @click="search()">搜索</Button>
+        </Col>
+      </Row>
     </div>
+    <div>
+      <ul>
+        <li>
+          <Button class="operation-button" type="primary" icon="md-add" @click="openNewModal()">新建</Button>
+          <Button
+            class="operation-button"
+            type="success"
+            icon="md-build"
+            @click="openModifyModal()"
+          >修改</Button>
+          <Button type="error" icon="md-trash" @click="del()">删除</Button>
+        </li>
+        <li>
+          <div style="padding: 10px 0;">
+            <Table
+              border
+              :columns="columns1"
+              :data="data1"
+              :height="400"
+              @on-selection-change="s=>{change(s)}"
+              @on-row-dblclick="s=>{dblclick(s)}"
+            ></Table>
+          </div>
+        </li>
+        <li>
+          <div style="text-align: right;">
+            <Page
+              :total="total"
+              :page-size="pageInfo.pageSize"
+              show-elevator
+              show-total
+              @on-change="e=>{pageSearch(e)}"
+            ></Page>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!-- 添加modal -->
+    <Modal
+      :mask-closable="false"
+      :visible.sync="newModal"
+      v-model="newModal"
+      :loading="loading"
+      width="600"
+      title="添加"
+      @on-ok="newOk('userNew')"
+      @on-cancel="cancel()"
+    >
+      <Form ref="userNew" :model="userNew" :rules="ruleNew" :label-width="100">
+        <Row>
+          <Col span="12">
+            <Form-item label="用户名:" prop="name">
+              <Input v-model="userNew.name" style="width: 204px" />
+            </Form-item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+            <Form-item label="登录名:" prop="loginName">
+              <Input v-model="userNew.loginName" style="width: 204px" />
+            </Form-item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+            <Form-item label="登录密码:" prop="password">
+              <Input v-model="userNew.password" style="width: 204px" type="password" password />
+            </Form-item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+            <Form-item label="再次输入密码:" prop="passwordAgain">
+              <Input v-model="userNew.passwordAgain" style="width: 204px" type="password" password />
+            </Form-item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+            <Form-item label="邮箱:" prop="email">
+              <Input v-model="userNew.email" style="width: 204px" />
+            </Form-item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+            <Form-item label="用户类型:" prop="usertype">
+              <Select v-model="userNew.usertype" style="width:200px">
+                <Option :value="0">普通用户</Option>
+                <Option :value="1">管理员</Option>
+              </Select>
+              <!-- <Input v-model="userModify.email" style="width: 204px"/> -->
+            </Form-item>
+          </Col>
+        </Row>
+      </Form>
+    </Modal>
+    <!--修改modal-->
+    <Modal
+      :mask-closable="false"
+      :visible.sync="modifyModal"
+      v-model="modifyModal"
+      width="600"
+      title="修改"
+      @on-ok="modifyOk('modifyModal')"
+      @on-cancel="cancel()"
+    >
+      <Form :label-width="80">
+        <Row>
+          <Col span="12">
+            <Form-item label="登录名:">
+              <Input v-model="userModify.name" style="width: 204px" disabled="disabled" />
+            </Form-item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+            <Form-item label="用户类型:">
+              <Select v-model="userModify.usertype" style="width:200px">
+                <Option :value="0">普通用户</Option>
+                <Option :value="1">管理员</Option>
+              </Select>
+            </Form-item>
+          </Col>
+        </Row>
+      </Form>
+    </Modal>
+    <!--配置角色modal-->
+    <Modal v-model="roleModal" width="500" title="角色配置" @on-ok="roleOk()" @on-cancel="cancel()">
+      <div>
+        <Table
+          border
+          :columns="columns2"
+          :data="data2"
+          :height="260"
+          @on-selection-change="s=>{change2(s)}"
+        ></Table>
+      </div>
+    </Modal>
+  </div>
 </template>
 <script>
 export default {
@@ -103,7 +198,8 @@ export default {
         loginName: null,
         password: null,
         passwordAgain: null,
-        email: null
+        email: null,
+        usertype: null
       },
       /*用于修改的user实体*/
       userModify: {
@@ -190,18 +286,15 @@ export default {
           width: 80,
           align: "center",
           render: (h, params) => {
-            return h(
-              "img",
-              {
-                attrs: {
-                  src: params.row.headimg
-                },
-                style: {
-                  width: '30px',  
-                  height: '30px'
-                }
+            return h("img", {
+              attrs: {
+                src: params.row.headimg
+              },
+              style: {
+                width: "30px",
+                height: "30px"
               }
-            );
+            });
           }
         },
         {
@@ -333,6 +426,7 @@ export default {
       this.userNew.password = null;
       this.userNew.passwordAgain = null;
       this.userNew.email = null;
+      this.userNew.usertype = null;
     },
     /*userModify实体初始化*/
     initUserModify() {
@@ -356,8 +450,9 @@ export default {
       this.userNew.name = e.name;
       this.userNew.loginName = e.loginName;
       this.userNew.password = e.password;
-      this.userNew.passwordAgain = e.password;
+      this.userNew.passwordAgain = e.passwordAgain;
       this.userNew.email = e.email;
+      this.userNew.usertype = e.usertype;
     },
     /*userModify设置*/
     userModifySet(e) {
@@ -432,14 +527,17 @@ export default {
     },
     /*新建modal的newOk点击事件*/
     newOk(userNew) {
+      // console.log("11111111113");
       this.$refs[userNew].validate(valid => {
         if (valid) {
+          console.log(this.userNew.password);
+          console.log(this.userNew);
           if (this.userNew.password == this.userNew.passwordAgain) {
             this.initUser();
             this.userSet(this.userNew);
             this.axios({
               method: "post",
-              url: "/users/user",
+              url: "/register",
               data: this.user
             })
               .then(

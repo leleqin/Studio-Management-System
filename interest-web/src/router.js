@@ -277,7 +277,31 @@ const routers = [
         meta: {
           title: "article"
         }
-      }
+      },
+      {
+        path: "workspace",
+        name: "workspace",
+        component: resolve => require(["./views/sys/workspace.vue"], resolve),
+        meta: {
+          title: "workspace"
+        }
+      },
+      {
+        path: "assets",
+        name: "assets",
+        component: resolve => require(["./views/sys/assets.vue"], resolve),
+        meta: {
+          title: "assets"
+        }
+      },
+      {
+        path: "signIn",
+        name: "signIn",
+        component: resolve => require(["./views/sys/signIn.vue"], resolve),
+        meta: {
+          title: "signIn"
+        }
+      },
     ]
   },
   {

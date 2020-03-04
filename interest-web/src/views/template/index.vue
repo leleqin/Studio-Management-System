@@ -21,18 +21,18 @@
 }
 
 .layout-title {
-  margin-left: 30px;
+  margin-left: 50px;
   height: inherit;
   float: left;
 }
 
-.layout-title .home-text {
-  color: rebeccapurple;
-  font-weight: bold;
-}
+/* .layout-title .home-text { */
+/* color: #36b7ab; */
+/* font-weight: bold; */
+/* } */
 
 .layout-title .home-text:hover {
-  color: #2d8cf0;
+  color: #a5e5df;
 }
 
 .menu-layout {
@@ -64,7 +64,7 @@
   top: 9px;
   right: -12px;
   color: #fff;
-  background-color: #2db7f5;
+  background-color: #36b7ab;
   border-radius: 50%;
   padding: 2px 5px;
   line-height: 1;
@@ -85,7 +85,7 @@
 <template>
   <div class="layout">
     <Layout>
-      <Header style="position: absolute;width: 100%;background:#fff;padding:0 0;z-index: 1000; ">
+      <Header style="position: absolute;width: 100%;background:#fff;padding:0 0;z-index: 1000;">
         <Menu
           mode="horizontal"
           theme="light"
@@ -98,7 +98,7 @@
               <a @click="backHome()">
                 <img
                   src="../../images/logo.jpg"
-                  style="width: 50px;height: 50px;"
+                  style="width: 120px;height: 40px;"
                   align="absmiddle"
                 />
               </a>
@@ -121,6 +121,12 @@
             </div>
             <div v-if="loginFlag" class="layout-nav">
               <MenuItem name="1">{{user.name}}</MenuItem>
+              <MenuItem name="7" v-if="!stateFlag">
+                <Icon type="md-hand"></Icon>签到
+              </MenuItem>
+              <MenuItem name="8" v-if="stateFlag">
+                <Icon type="md-hand"></Icon>已签到
+              </MenuItem>
               <MenuItem name="2">
                 <Icon type="ios-mail"></Icon>邮件
               </MenuItem>
@@ -166,13 +172,13 @@
       <Footer class="layout-footer-center">
         <div>
           <a href="https://github.com/leleqin" target="_blank">
-            <Icon style="color: rebeccapurple;" size="40" type="logo-github"></Icon>
+            <!-- <Icon style="color: rebeccapurple;" size="40" type="logo-github"></Icon> -->
           </a>
         </div>
-        <p>2018-2020 &copy; smallsail-wh</p>
+        <p>2019-2020 &copy;</p>
       </Footer>
     </Layout>
-
+    <!-- 邮件modal -->
     <Modal
       :mask-closable="false"
       :visible.sync="emailModal"
@@ -203,6 +209,28 @@
         </FormItem>
       </Form>
     </Modal>
+    <!-- 签到modal -->
+    <Modal
+      :mask-closable="false"
+      :visible.sync="stateModal"
+      :loading="loading"
+      v-model="stateModal"
+      width="300"
+      title="签到"
+      @on-ok="stateOk('state')"
+      @on-cancel="cancel()"
+    >
+      <p slot="header" style="color:#f60;text-align:center">
+        <Icon type="ios-information-circle"></Icon>
+        <span>签到提示</span>
+      </p>
+      <div style="text-align:center">
+        <p>是否确认签到？</p>
+      </div>
+      <div slot="footer">
+        <Button type="error" size="large" long :loading="modal_loading" @click="publish()">确认</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
@@ -210,10 +238,13 @@ export default {
   data() {
     return {
       loginFlag: false,
+      stateFlag: false,
       consoleFlag: false,
       loading: true,
       searchValue: "",
       emailModal: false,
+      stateModal: false,
+      userId: 0,
       //用户未读消息个数
       unreadMsgCount: 0,
       email: {
@@ -287,10 +318,11 @@ export default {
             if (response.data.data != null && response.data.data != "") {
               this.loginFlag = true;
               this.userSet(response.data.data);
-              if (response.data.data.usertype == 1) {
+              this.userId = response.data.data.id;
+              if (response.data.data.usertype != 0) {
                 this.consoleFlag = true;
               }
-
+              this.stateGet();
               return this.axios({
                 method: "get",
                 url: "/msgrecords/unreadnum"
@@ -310,6 +342,31 @@ export default {
         .catch(
           function(error) {
             this.$Message.error("无权限");
+          }.bind(this)
+        );
+ 
+    },
+    stateGet(){
+      let _this = this;
+      this.axios({
+        method: "get",
+        url: "/sign/isSignInToday",
+        params: {
+          userId: this.userId,
+        }
+      })
+        .then(
+          function(response) {
+            if(response.data.isSign == true){
+            this.stateFlag = true;
+            }else{
+              this.stateFlag = false;
+            }
+          }.bind(this)
+        )
+        .catch(
+          function(error) {
+            this.$Message.error("签到失败");
           }.bind(this)
         );
     },
@@ -349,6 +406,8 @@ export default {
         this.$router.push("/");
       } else if (e == "article") {
         this.$router.push("/article");
+      } else if (e == 7) {
+        this.stateModal = true;
       }
     },
     backHome() {
@@ -384,6 +443,32 @@ export default {
           }, 1000);
         }
       });
+    },
+    publish() {
+      //this.modal_loading = true;
+      this.axios({
+        method: "post",
+        url: "/sign/addSignIn",
+        params: {
+          signState: 1,
+          userId: this.userId,
+        }
+      })
+        .then(
+          function(response) {
+            this.$Message.info("签到成功");
+            if(response.data == "签到成功"){
+              this.stateFlag = true;
+              // console.log(this.stateModal);
+            }
+          }.bind(this)
+        )
+        .catch(
+          function(error) {
+            alter(error);
+          }.bind(this)
+        );
+        this.stateModal = false;
     },
     /*登录*/
     login(code, state) {

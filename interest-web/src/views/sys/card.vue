@@ -1,48 +1,64 @@
 <template>
-	<div style="margin: 20px;">
-		<div>
-            <Row style="margin-bottom: 25px;">
-                <Col span="8">兴趣：
-                    <Select v-model="interestid" clearable style="width: 200px">
-                        <Option v-for="item in interestList" :value="item.id" :key="item.id">{{ item.title }}</Option>
-                    </Select>
-                </Col>
-                <Col span="8"><Button type="primary" shape="circle" icon="ios-search" @click="search()">搜索</Button></Col>
-            </Row>
-        </div>
-        <div>
-            <ul>
-            	<li>
-                    <Button type="error" icon="md-trash" @click="del()">删除</Button>
-                </li>
-                <li>
-                    <div style="padding: 10px 0;">
-                    	<Table border :columns="columns1" :data="data1" :height="400" @on-selection-change="s=>{change(s)}" @on-row-dblclick="s=>{dblclick(s)}"></Table>
-                    </div> 
-                </li>
-                <li>
-                    <div style="text-align: right;">
-                        <Page :total="total" :page-size="pageInfo.pageSize" show-elevator show-total @on-change="e=>{pageSearch(e)}"></Page>
-                    </div>  
-                </li>
-            </ul>
-        </div>
-        <Modal :mask-closable="false" :visible.sync="modal" v-model="modal" width="600" title="查看">
-	        <Form :label-width="80" >
-	        	<Form-item label="登录名:">
-	        		<strong>{{postcard.username}}</strong>
-                    <!-- <Input v-model="email.username" style="width: 204px" disabled="disabled" /> -->
-                </Form-item>
-                <Form-item label="内容:">
-                	<span>{{postcard.content}}</span>
-                    <!-- <Input v-model="email.username" style="width: 204px" disabled="disabled" /> -->
-                </Form-item>
-            </Form>
-	        <div slot="footer">
-	            <Button type="error" size="large"  @click="cancel">关闭</Button>
-	        </div>
-	    </Modal>	
+  <div style="margin: 20px;">
+    <div>
+      <Row style="margin-bottom: 25px;">
+        <Col span="8">
+          新闻：
+          <Select v-model="interestid" clearable style="width: 200px">
+            <Option v-for="item in interestList" :value="item.id" :key="item.id">{{ item.title }}</Option>
+          </Select>
+        </Col>
+        <Col span="8">
+          <Button type="primary" shape="circle" icon="ios-search" @click="search()">搜索</Button>
+        </Col>
+      </Row>
     </div>
+    <div>
+      <ul>
+        <li>
+          <Button type="error" icon="md-trash" @click="del()">删除</Button>
+        </li>
+        <li>
+          <div style="padding: 10px 0;">
+            <Table
+              border
+              :columns="columns1"
+              :data="data1"
+              :height="400"
+              @on-selection-change="s=>{change(s)}"
+              @on-row-dblclick="s=>{dblclick(s)}"
+            ></Table>
+          </div>
+        </li>
+        <li>
+          <div style="text-align: right;">
+            <Page
+              :total="total"
+              :page-size="pageInfo.pageSize"
+              show-elevator
+              show-total
+              @on-change="e=>{pageSearch(e)}"
+            ></Page>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <Modal :mask-closable="false" :visible.sync="modal" v-model="modal" width="600" title="查看">
+      <Form :label-width="80">
+        <Form-item label="登录名:">
+          <strong>{{postcard.username}}</strong>
+          <!-- <Input v-model="email.username" style="width: 204px" disabled="disabled" /> -->
+        </Form-item>
+        <Form-item label="内容:">
+          <span>{{postcard.content}}</span>
+          <!-- <Input v-model="email.username" style="width: 204px" disabled="disabled" /> -->
+        </Form-item>
+      </Form>
+      <div slot="footer">
+        <Button type="error" size="large" @click="cancel">关闭</Button>
+      </div>
+    </Modal>
+  </div>
 </template>
 <script>
 export default {
@@ -82,7 +98,7 @@ export default {
           key: "username"
         },
         {
-          title: "兴趣归属",
+          title: "新闻归属",
           key: "interestid",
           render: (h, params) => {
             for (var i = this.interestList.length - 1; i >= 0; i--) {

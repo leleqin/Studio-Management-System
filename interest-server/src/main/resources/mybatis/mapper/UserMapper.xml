@@ -23,6 +23,7 @@
         <result column="info" property="info"/>
         <result column="location" property="location"/>
         <result column="skill" property="skill"/>
+        <result column="workspaceName" property="workspaceName"/>
     </resultMap>
     <!-- 获取user列表 -->
     <select id="usersList" resultMap="userMap">
@@ -88,9 +89,9 @@
                    order="AFTER">
             select LAST_INSERT_ID()
         </selectKey>
-        insert into sys_user (name,email,usertype,headimg,url,create_time,githubid)
+        insert into sys_user (name,login_name,password,email,usertype,headimg,url,create_time,githubid)
         values
-        (#{name},#{email},#{usertype},#{headimg},#{url},#{createTime},#{githubid})
+        (#{name},#{loginName},#{password},#{email},#{usertype},#{headimg},#{url},#{createTime},#{githubid})
     </insert>
     <!-- 更新用户信息 -->
     <update id="updateUser" parameterType="UserEntity">
@@ -169,11 +170,10 @@
     </select>
 
     <select id="getUserInfoById" resultMap="userInfo">
-        select a.headimg,a.name,a.email,a.url,b.info,b.location,b.skill
-        from sys_user a
-        left join sys_user_detail b on a.id = b.userid
+        select u.headimg,u.name,u.email,u.url,d.info,d.location,d.skill,w.name workspaceName
+        from sys_user u,workspace w,sys_user_detail d
         <where>
-            a.id = #{userId}
+            u.id = d.userid and u.workspaceId = w.id and u.id = #{userId}
         </where>
     </select>
 

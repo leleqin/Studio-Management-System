@@ -10,7 +10,9 @@
   bottom: 0;
   left: 0;
   text-align: center;
-  /*background: rebeccapurple;*/
+  background-repeat: no-repeat;
+  background-size: 100%;
+  /* background: rebeccapurple; */
   background-image: url(../images/login.jpg);
 }
 .index .ivu-row-flex {
@@ -27,7 +29,8 @@
 /*具体内容*/
 .wrap_conter ul {
   position: relative;
-  width: 300px;
+  width: 500px;
+  height: 400px;
   border-radius: 5px;
   background: #fff;
   margin: 0 auto;
@@ -57,7 +60,8 @@
   margin-top: 20px;
 }
 .name-password-error {
-  padding-bottom: 2px;
+  padding-top: 20px;
+  padding-left: 55px;
   text-align: left;
   line-height: 1;
   color: #ed3f14;
@@ -75,55 +79,82 @@
   width: 35px;
   height: 40px;
 }
+.ivu-form-item-error-tip {
+  left: 50px;
+}
 </style>
 <template>
-    <div class="index">
-        <div id="index_pc_bj">
-            <Form ref="formLogin" :model="formLogin" :rules="ruleLogin">
-                <div class="wrap_conter">
-                    <ul style="list-style: none;box-shadow:10px 10px 20px rgba(0,0,0,.5);">
-                        <li style="border-bottom: 1px solid #e9eaec;">
-                            <div class="content">
-                                <img src="../images/logo.jpg" style="width: 40px;height: 40px;" align="absmiddle" />
-                                <span style="float:right;font-size: 15px"><Icon type="ios-log-in"></Icon>欢迎登录</span>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="name-password-error" v-if="this.$store.state.ifSign">用户名或密码错误</div>
-                            <dl>
-                                <FormItem prop="userName" >
-                                    <Input v-model="formLogin.userName" type="text" placeholder="登录名" >
-                                        <Icon type="ios-person-outline" slot="prepend" ></Icon>
-                                    </Input>
-                                </FormItem>
-                                <FormItem prop="password">
-                                    <Input v-model="formLogin.password" type="password" placeholder="密码" >
-                                    <Icon type="ios-lock-outline" slot="prepend"></Icon></Input>
-                                </FormItem>
-                                <FormItem>
-                                    <Button type="primary" @click="login('formLogin')" style="width: 250px">登录</Button>
-                                    <ul class="account-list">
-                                        <li>
-                                            <a href="https://github.com/login/oauth/authorize?client_id=bbb5cc2034eb62484c1c&state=github" style="{right: 26px;}">
-                                                <!-- <Icon  style="color: rebeccapurple;" size="40" type="social-github"></Icon> -->
-                                                <img class="icon" src="../images/GitHub.svg" />
-                                            </a>
-                                        </li>
-                                        
-                                        <li>
-                                            <a href="https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101512648&redirect_uri=http://www.lovemtt.com/qq&state=qq" style="{right: 26px;}">
-                                                <img class="icon" src="../images/social-qq.svg" />  
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </FormItem>
-                            </dl>
-                        </li>
-                    </ul>
-                </div>
-            </Form>
+  <div class="index">
+    <div id="index_pc_bj">
+      <Form ref="formLogin" :model="formLogin" :rules="ruleLogin">
+        <div class="wrap_conter">
+          <ul style="list-style: none;box-shadow:10px 10px 20px rgba(0,0,0,.5);">
+            <li style="border-bottom: 1px solid #e9eaec; padding-top: 15px;padding-bottom: 20px;">
+              <div class="content">
+                <img src="../images/logo.jpg" style="width: 120px;height: 40px;" align="absmiddle" />
+                <!-- <span style="padding-left:80px;font-size: 2.2em;font-weight: bold;">LOGIN</span> -->
+              </div>
+            </li>
+            <li>
+              <div class="name-password-error" v-if="this.$store.state.ifSign">用户名或密码错误</div>
+              <dl>
+                <FormItem prop="userName">
+                  <Input
+                    v-model="formLogin.userName"
+                    prefix="ios-contact"
+                    placeholder="Enter name"
+                    style="width:350px;height:40px;"
+                  />
+                </FormItem>
+                <FormItem prop="password">
+                  <Input
+                    prefix="ios-lock-outline"
+                    v-model="formLogin.password"
+                    type="password"
+                    password
+                    placeholder="Enter password..."
+                    style="width: 350px"
+                  />
+                </FormItem>
+                <FormItem>
+                  <Button
+                    type="primary"
+                    @click="login('formLogin')"
+                    style="width: 300px;height:40px; margin-top:80px;"
+                  >登录</Button>
+                  <Button
+                    type="primary"
+                    @click="register()"
+                    style="width: 300px;height:40px;margin-top:20px;"
+                  >注册</Button>
+                  <ul class="account-list">
+                    <li>
+                      <a
+                        href="https://github.com/login/oauth/authorize?client_id=bbb5cc2034eb62484c1c&state=github"
+                        style="{right: 26px;}"
+                      >
+                        <!-- <Icon  style="color: rebeccapurple;" size="40" type="social-github"></Icon> -->
+                        <img class="icon" src="../images/GitHub.svg" />
+                      </a>
+                    </li>
+
+                    <li>
+                      <a
+                        href="https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101512648&redirect_uri=http://www.lovemtt.com/qq&state=qq"
+                        style="{right: 26px;}"
+                      >
+                        <img class="icon" src="../images/social-qq.svg" />
+                      </a>
+                    </li>
+                  </ul>
+                </FormItem>
+              </dl>
+            </li>
+          </ul>
         </div>
+      </Form>
     </div>
+  </div>
 </template>
 <script>
 export default {

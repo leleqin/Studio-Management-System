@@ -1,6 +1,7 @@
 package com.interest.controller.sys;
 
 import com.interest.annotation.InterestLog;
+import com.interest.model.entity.SignInEntity;
 import com.interest.model.utils.PageResult;
 import com.interest.model.entity.UserEntity;
 import com.interest.model.request.UserInfoRequest;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -81,6 +83,8 @@ public class UserController {
     @InterestLog
     @PostMapping("/register")
     public ResponseWrapper<UserEntity> register(@RequestBody UserEntity userEntity) {
+        userEntity.setUsertype(0);
+        System.out.println(userEntity);
         userService.insertUser(userEntity);
         log.debug("The method is ending");
         return new ResponseWrapper<>(userEntity);

@@ -11,7 +11,7 @@
   overflow: auto;
 }
 .layout-breadcrumb {
-  padding: 10px 15px 0;
+  padding: 30px 15px 0;
 }
 .layout-content {
   /*height: 80%;*/
@@ -59,7 +59,7 @@
   /*height: 30px;*/
   /*background: #5b6270;*/
   border-radius: 3px;
-  margin: 15px auto 30px auto;
+  margin: 15px auto 20px auto;
 }
 .layout-logo-left img {
   width: 20%;
@@ -78,67 +78,79 @@
   /*width: 315px;
         margin: 0 auto;
         margin-right: 20px;*/
+  margin-top: 10px;
   height: inherit;
   float: right;
 }
 </style>
 <template>
-    <div class="layout">
-        <Row type="flex" style="position:absolute;left:0;top:0;width:100%;">
-            <Col span="4" class="layout-menu-left">
-                <div class="layout-logo-left">
-                  <div>
-                    <a @click="backHome()">
-                        <img src="../../images/logo.jpg" style="width: 50px;height: 50px;" align="absmiddle" />
-                    </a>
-                      <strong>控制台</strong>
-                  </div>
-                </div>
-                <Menu active-name="1-2" theme="dark" width="auto" :open-names="['1']" @on-select="m=>{select(m)}">
-                    <Submenu v-for="pmenu in menuList" :name="pmenu.id" :key="pmenu.id">
-                        <template slot="title">
-                            <Icon :type="pmenu.icon"></Icon>
-                            {{pmenu.name}}
-                        </template>
-                        <MenuItem v-for="cmenu in pmenu.children" :name="cmenu.id" :key="cmenu.id">
-                            <Icon :type="cmenu.icon"></Icon>
-                            {{cmenu.name}}
-                        </MenuItem>
-                    </Submenu>
-                </Menu>
-            </Col>
-            <Col span="20">
-                <div class="layout-header">
-                    <Menu mode="horizontal" theme="light"  :style="{height:'65px',width:'100%'}"  @on-select="m=>{menuSelect(m)}" >
-                        <div style="width: 95%;margin: 0 auto">
-                            <div class="layout-nav">
-                                <MenuItem name="2">
-                                    <Icon type="ios-person"></Icon>
-                                    {{userName}}
-                                </MenuItem>
-                                <MenuItem name="1">
-                                    <Icon type="log-out"></Icon>
-                                    退出
-                                </MenuItem>
-                            </div>
-                        </div>
-                    </Menu>
-                </div>
-                <div class="layout-breadcrumb">
-                    <Breadcrumb>
-                        <BreadcrumbItem to="/base/welcome">Home</BreadcrumbItem>
-                        <BreadcrumbItem v-for="item in breadcrumbData" :to="item.url" :key="item.id">{{item.name}}</BreadcrumbItem>
-                    </Breadcrumb>
-                </div>
-                <div class="layout-content">
-                    <router-view></router-view>
-                </div>
-                <div class="layout-copy">
-                    2018-2020 &copy; smallsail-wh
-                </div>
-            </Col>
-        </Row>
-    </div>
+  <div class="layout">
+    <Row type="flex" style="position:absolute;left:0;top:0;width:100%;">
+      <Col span="4" class="layout-menu-left">
+        <div class="layout-logo-left">
+          <div>
+            <a @click="backHome()">
+              <img src="../../images/logo.jpg" style="width: 120px;height: 40px;" align="absmiddle" />
+            </a>
+          </div>
+        </div>
+        <Menu
+          active-name="1-2"
+          theme="dark"
+          width="auto"
+          :open-names="['1']"
+          @on-select="m=>{select(m)}"
+        >
+          <Submenu v-for="pmenu in menuList" :name="pmenu.id" :key="pmenu.id">
+            <template slot="title">
+              <Icon :type="pmenu.icon"></Icon>
+              {{pmenu.name}}
+            </template>
+            <MenuItem v-for="cmenu in pmenu.children" :name="cmenu.id" :key="cmenu.id">
+              <Icon :type="cmenu.icon"></Icon>
+              {{cmenu.name}}
+            </MenuItem>
+          </Submenu>
+        </Menu>
+      </Col>
+      <Col span="20">
+        <div class="layout-header">
+          <Menu
+            mode="horizontal"
+            theme="light"
+            :style="{height:'75px',width:'100%'}"
+            @on-select="m=>{menuSelect(m)}"
+          >
+            <div style="width: 95%;margin: 0 auto">
+              <div class="layout-nav">
+                <MenuItem name="2">
+                  <Icon type="ios-person"></Icon>
+                  {{userName}}
+                </MenuItem>
+                <MenuItem name="1">
+                  <Icon type="log-out"></Icon>退出
+                </MenuItem>
+              </div>
+            </div>
+          </Menu>
+        </div>
+        <div class="layout-breadcrumb">
+          <Breadcrumb>
+            <BreadcrumbItem to="/base/welcome">Home</BreadcrumbItem>
+            <BreadcrumbItem
+              v-for="item in breadcrumbData"
+              :to="item.url"
+              :key="item.id"
+            >{{item.name}}</BreadcrumbItem>
+          </Breadcrumb>
+        </div>
+        <div class="layout-content">
+          <router-view></router-view>
+        </div>
+        <div class="layout-copy">2018-2020 &copy;</div>
+      </Col>
+    </Row>
+  </div>
 </template>
 <script>
 export default {

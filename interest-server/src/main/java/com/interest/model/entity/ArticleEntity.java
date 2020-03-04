@@ -2,9 +2,6 @@ package com.interest.model.entity;
 
 import lombok.Data;
 
-/**
- * @author wanghuan
- */
 @Data
 public class ArticleEntity {
 

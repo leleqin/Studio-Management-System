@@ -1,118 +1,157 @@
 <style scoped>
-  .operation-button{
-    margin-right: 3px;
-  }
+.operation-button {
+  margin-right: 3px;
+}
 </style>
 <template>
-	<div style="margin: 20px;">
-        <div>
-            <Row style="margin-bottom: 25px;">
-                <Col span="8">菜单名称：
-                    <Select v-model="menuId" filterable clearable style="width: 200px">
-                        <Option v-for="item in menuList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                    </Select>
-                </Col>
-                <Col span="8"><Button type="primary" shape="circle" icon="ios-search" @click="search()">搜索</Button></Col>
-            </Row>
-        </div>            
-        <div>
-            <ul>
-                <li>
-                    <Button class="operation-button" type="primary" icon="md-add" @click="openNewModal()">新建</Button>
-                    <Button class="operation-button" type="success" icon="md-build" @click="openModifyModal()">修改</Button>
-                    <Button type="error" icon="md-trash" @click="del()">删除</Button>
-                </li>
-                <li>
-                    <div style="padding: 10px 0;">
-                    	<Table border :columns="columns1" :data="data1" :height="400" @on-selection-change="s=>{change(s)}" @on-row-dblclick="s=>{dblclick(s)}"></Table>
-                    </div> 
-                </li>
-                <li>
-                    <div style="text-align: right;">
-                        <Page :total="total" :page-size="pageInfo.pageSize" show-elevator show-total @on-change="e=>{pageSearch(e)}"></Page>
-                    </div>  
-                </li>
-            </ul>
-        </div>
-        <!--添加modal-->  
-        <Modal :mask-closable="false" :visible.sync="newModal" :loading = "loading" v-model="newModal" width="600" title="新建" @on-ok="newOk('menuNew')" @on-cancel="cancel()">
-            <Form ref="menuNew" :model="menuNew" :rules="ruleNew" :label-width="80" >
-                <Row>
-                    <Col span="12">
-                        <Form-item label="菜单名称:" prop="name">
-                            <Input v-model="menuNew.name" style="width: 204px"/>
-                        </Form-item>
-                    </Col>
-                    <Col span="12">
-                        <Form-item label="路径:" prop="url">
-                            <Input v-model="menuNew.url" style="width: 204px"/>
-                        </Form-item>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span="12">
-                        <Form-item label="父类ID:" prop="parentId">
-                            <Input v-model="menuNew.parentId" style="width: 204px"/>
-                        </Form-item>
-                    </Col>
-                    <Col span="12">
-                        <Form-item label="排序号:" prop="sort">
-                            <Input v-model="menuNew.sort" style="width: 204px"/>
-                        </Form-item>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span="12">
-                        <Form-item label="图标:" prop="icon">
-                            <Input v-model="menuNew.icon" style="width: 204px"/>
-                        </Form-item>
-                    </Col>
-                </Row>
-                <Form-item label="描述:" prop="remark">
-                     <Input v-model="menuNew.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}"></Input>
-                </Form-item>
-            </Form>
-        </Modal>
-        <!--修改modal-->  
-        <Modal :mask-closable="false" :visible.sync="modifyModal" :loading = "loading" v-model="modifyModal" width="600" title="修改" @on-ok="modifyOk('menuModify')" @on-cancel="cancel()">
-            <Form ref="menuModify" :model="menuModify" :rules="ruleModify" :label-width="80" >
-                <Row>
-                    <Col span="12">
-                        <Form-item label="菜单名称:" prop="name">
-                            <Input v-model="menuModify.name" style="width: 204px"/>
-                        </Form-item>
-                    </Col>
-                    <Col span="12">
-                        <Form-item label="路径:" prop="url">
-                            <Input v-model="menuModify.url" style="width: 204px"/>
-                        </Form-item>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span="12">
-                        <Form-item label="父类ID:" prop="parentId">
-                            <Input v-model="menuModify.parentId" style="width: 204px"/>
-                        </Form-item>
-                    </Col>
-                    <Col span="12">
-                        <Form-item label="排序号:" prop="sort">
-                            <Input v-model="menuModify.sort" style="width: 204px"/>
-                        </Form-item>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span="12">
-                        <Form-item label="图标:" prop="icon">
-                            <Input v-model="menuModify.icon" style="width: 204px"/>
-                        </Form-item>
-                    </Col>
-                </Row>
-                <Form-item label="描述:" prop="remark">
-                     <Input v-model="menuModify.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}"></Input>
-                </Form-item>
-            </Form>
-        </Modal>
+  <div style="margin: 20px;">
+    <div>
+      <Row style="margin-bottom: 25px;">
+        <Col span="8">
+          菜单名称：
+          <Select v-model="menuId" filterable clearable style="width: 200px">
+            <Option v-for="item in menuList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+        </Col>
+        <Col span="8">
+          <Button type="primary" shape="circle" icon="ios-search" @click="search()">搜索</Button>
+        </Col>
+      </Row>
     </div>
+    <div>
+      <ul>
+        <li>
+          <Button class="operation-button" type="primary" icon="md-add" @click="openNewModal()">新建</Button>
+          <Button
+            class="operation-button"
+            type="success"
+            icon="md-build"
+            @click="openModifyModal()"
+          >修改</Button>
+          <Button type="error" icon="md-trash" @click="del()">删除</Button>
+        </li>
+        <li>
+          <div style="padding: 10px 0;">
+            <Table
+              border
+              :columns="columns1"
+              :data="data1"
+              :height="400"
+              @on-selection-change="s=>{change(s)}"
+              @on-row-dblclick="s=>{dblclick(s)}"
+            ></Table>
+          </div>
+        </li>
+        <li>
+          <div style="text-align: right;">
+            <Page
+              :total="total"
+              :page-size="pageInfo.pageSize"
+              show-elevator
+              show-total
+              @on-change="e=>{pageSearch(e)}"
+            ></Page>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!--添加modal-->
+    <Modal
+      :mask-closable="false"
+      :visible.sync="newModal"
+      :loading="loading"
+      v-model="newModal"
+      width="600"
+      title="新建"
+      @on-ok="newOk('menuNew')"
+      @on-cancel="cancel()"
+    >
+      <Form ref="menuNew" :model="menuNew" :rules="ruleNew" :label-width="80">
+        <Row>
+          <Col span="12">
+            <Form-item label="菜单名称:" prop="name">
+              <Input v-model="menuNew.name" style="width: 204px" />
+            </Form-item>
+          </Col>
+          <Col span="12">
+            <Form-item label="路径:" prop="url">
+              <Input v-model="menuNew.url" style="width: 204px" />
+            </Form-item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+            <Form-item label="父类ID:" prop="parentId">
+              <Input v-model="menuNew.parentId" style="width: 204px" />
+            </Form-item>
+          </Col>
+          <Col span="12">
+            <Form-item label="排序号:" prop="sort">
+              <Input v-model="menuNew.sort" style="width: 204px" />
+            </Form-item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+            <Form-item label="图标:" prop="icon">
+              <Input v-model="menuNew.icon" style="width: 204px" />
+            </Form-item>
+          </Col>
+        </Row>
+        <Form-item label="描述:" prop="remark">
+          <Input v-model="menuNew.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}"></Input>
+        </Form-item>
+      </Form>
+    </Modal>
+    <!--修改modal-->
+    <Modal
+      :mask-closable="false"
+      :visible.sync="modifyModal"
+      :loading="loading"
+      v-model="modifyModal"
+      width="600"
+      title="修改"
+      @on-ok="modifyOk('menuModify')"
+      @on-cancel="cancel()"
+    >
+      <Form ref="menuModify" :model="menuModify" :rules="ruleModify" :label-width="80">
+        <Row>
+          <Col span="12">
+            <Form-item label="菜单名称:" prop="name">
+              <Input v-model="menuModify.name" style="width: 204px" />
+            </Form-item>
+          </Col>
+          <Col span="12">
+            <Form-item label="路径:" prop="url">
+              <Input v-model="menuModify.url" style="width: 204px" />
+            </Form-item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+            <Form-item label="父类ID:" prop="parentId">
+              <Input v-model="menuModify.parentId" style="width: 204px" />
+            </Form-item>
+          </Col>
+          <Col span="12">
+            <Form-item label="排序号:" prop="sort">
+              <Input v-model="menuModify.sort" style="width: 204px" />
+            </Form-item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+            <Form-item label="图标:" prop="icon">
+              <Input v-model="menuModify.icon" style="width: 204px" />
+            </Form-item>
+          </Col>
+        </Row>
+        <Form-item label="描述:" prop="remark">
+          <Input v-model="menuModify.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}"></Input>
+        </Form-item>
+      </Form>
+    </Modal>
+  </div>
 </template>
 <script>
 export default {

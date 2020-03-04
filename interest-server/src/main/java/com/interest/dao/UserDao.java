@@ -3,6 +3,7 @@ package com.interest.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.interest.model.entity.SignInEntity;
 import com.interest.model.entity.UserEntity;
 import com.interest.model.ordinary.UserIdHeadImg;
 import com.interest.model.request.UserInfoRequest;

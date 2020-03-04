@@ -27,4 +27,7 @@ public class UserInfoResponse {
     @ApiModelProperty("技能")
     private String skill;
 
+    @ApiModelProperty("所属工作室")
+    private String workspaceName;
+
 }

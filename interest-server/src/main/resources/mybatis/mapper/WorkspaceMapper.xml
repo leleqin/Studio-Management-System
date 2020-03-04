@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.interest.dao.WorkspaceDao">
+	<resultMap id="workspaceMap" type="com.interest.model.entity.WorkspaceEntity">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="desc" property="desc" />
+		<result column="address" property="address" />
+		<result column="uid" property="uid" />
+		<result column="userId" property="userId" />
+		<result column="createtime" property="createtime" />
+	</resultMap>
+
+	<!-- 获取workspace列表 -->
+	<select id="workspacesList" resultMap="workspaceMap">
+		select * from workspace
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<!-- 获取workspace列表的总量 -->
+	<select id="workspaceSize" resultType="Integer">
+	    <![CDATA[select count(*) from workspace]]>
+	</select>
+	<!--新建workspace-->
+	<insert id="insertWorkspace">
+		insert into workspace
+		(name,`desc`,address,uid,userId,createtime)
+		values
+		(#{workspaceEntity.name},#{workspaceEntity.desc},#{workspaceEntity.address},#{workspaceEntity.uid},#{workspaceEntity.userId},#{workspaceEntity.createtime})
+	</insert>
+	<!--删除workspace-->
+	<delete id="deleteWorkspaces">
+		delete from workspace
+		<where>
+			<if test="groupId !=null">
+				id in
+				<foreach collection="groupId" item="item" index="index"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+	<!--更新工作室信息-->
+	<update id="updateWorkspace">
+		update workspace set
+		name = #{workspaceEntity.name},
+		`desc` = #{workspaceEntity.desc},
+		address = #{workspaceEntity.address},
+		uid = #{workspaceEntity.uid},
+		userId =
+		#{workspaceEntity.userId},
+		createtime = #{workspaceEntity.createtime}
+		<where>
+			id = #{workspaceEntity.id}
+		</where>
+	</update>
+
+
+	<resultMap id="assetsMap" type="com.interest.model.entity.AssetsEntity">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="type" property="type" />
+		<result column="uid" property="uid" />
+		<result column="workspaceId" property="workspaceId" />
+		<result column="userId" property="userId" />
+		<result column="number" property="number" />
+		<result column="abrasion" property="abrasion" />
+		<result column="createTime" property="createTime" />
+	</resultMap>
+
+	<select id="assetsList" resultMap="assetsMap">
+		select * from assets
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<!-- 获取assets列表的总量 -->
+	<select id="assetsSize" resultType="Integer">
+	    <![CDATA[
+        select count(*) from assets
+        ]]>
+	</select>
+</mapper>
