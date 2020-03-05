@@ -113,29 +113,6 @@ export default {
           title: "创建时间",
           key: "createtime"
         },
-        {
-          title: "操作",
-          align: "center",
-          key: "action",
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "info"
-                  },
-                  on: {
-                    click: () => {
-                      this.emailInfo(params.row);
-                    }
-                  }
-                },
-                "查看"
-              )
-            ]);
-          }
-        }
       ],
       /*表数据*/
       data1: []

@@ -22,18 +22,18 @@
           <Col span="4"><Button type="primary" shape="circle" icon="ios-search" @click="search()">搜索</Button></Col>
       </Row>
     </div> 
-    <div class="del-select">
+    <!-- <div class="del-select">
       <span>删除：</span>
       <i-switch size="large" v-model="del" @on-change="switchChange()">
         <span slot="open">开启</span>
         <span slot="close">关闭</span>
       </i-switch>
-    </div>
+    </div> -->
     <div>
         <ul>
         	<li>
-                <Button v-if="!del" type="error" icon="md-trash" class="botton-layout" @click="clickDel()">删除</Button>
-                <Button v-if="del" type="success" icon="md-build" class="botton-layout" @click="republish()">恢复</Button>
+                <!-- <Button v-if="!del" type="error" icon="md-trash" class="botton-layout" @click="clickDel()">删除</Button>
+                <Button v-if="del" type="success" icon="md-build" class="botton-layout" @click="republish()">恢复</Button> -->
                 <Button type="info" icon="md-build" class="botton-layout" @click="top(1)">置顶</Button>
                 <Button type="info" icon="md-build" class="botton-layout" @click="top(0)">取消置顶</Button>
             </li>

@@ -13,9 +13,12 @@
   <div style="margin: 40px;">
     <div>
       <Row style="margin-bottom: 25px;">
+        <Col span="9">搜索：
+            <Input v-model="searchContent" placeholder="请输入..." style="width:300px" />
+          </Col>
         <Col span="6">
-          搜索：
-          <DatePicker v-model="date" type="date" placeholder="Select date" style="width: 200px"></DatePicker>
+         <!-- v-model="date" -->
+          <DatePicker @on-change='handleChange' type="date" placeholder="Select date" style="width: 200px"></DatePicker>
         </Col>
         <Col span="4">
           <Button type="primary" shape="circle" icon="ios-search" @click="search()">搜索</Button>
@@ -56,7 +59,6 @@ export default {
     return {
       date: null,
       searchContent: null,
-      del: false,
       groupId: [],
       /*分页total属性绑定值*/
       total: 0,
@@ -73,14 +75,8 @@ export default {
           align: "center"
         },
         {
-          title: "ID",
-          key: "id",
-          width: 60,
-          align: "center"
-        },
-        {
           title: "学生姓名",
-          key: "userid"
+          key: "name"
         },
         {
           title: "签到时间",
@@ -88,7 +84,7 @@ export default {
         },
         {
           title: "所属工作室",
-          key: "info"
+          key: "workspaceName"
         }
       ],
       /*表数据*/
@@ -102,6 +98,9 @@ export default {
     });
   },
   methods: {
+    handleChange(daterange){
+        this.date = daterange;
+    },
     /*pageInfo实体初始化*/
     initPageInfo() {
       this.pageInfo.page = 0;
@@ -111,11 +110,7 @@ export default {
     getTable(e) {
       var dateTimestamp = null;
       if (this.date != null && this.date != "") {
-        dateTimestamp = this.date.getTime();
-      }
-      var delSign = 0;
-      if (this.del) {
-        delSign = 1;
+        dateTimestamp = this.date;
       }
       this.axios({
         method: "get",
@@ -123,16 +118,15 @@ export default {
         params: {
           dateTimestamp: dateTimestamp,
           searchContent: this.searchContent,
-          del: delSign,
           page: e.pageInfo.page,
           pageSize: e.pageInfo.pageSize
         }
-      })
-        .then(
+      }).then(
           function(response) {
             this.data1 = response.data.data.data;
             this.total = response.data.data.totalCount;
             for (var i = this.data1.length - 1; i >= 0; i--) {
+              console.log("date:"+ this.data1[i].createTime);
               this.data1[i].createTime = this.dateGet(this.data1[i].createTime);
             }
           }.bind(this)
@@ -168,28 +162,6 @@ export default {
       this.getTable({
         pageInfo: this.pageInfo
       });
-    },
-    top(e) {
-      this.axios({
-        method: "patch",
-        url: "/admin/articles/top",
-        data: this.groupId,
-        params: {
-          top: e
-        }
-      })
-        .then(
-          function(response) {
-            this.getTable({
-              pageInfo: this.pageInfo
-            });
-            this.groupId = [];
-            this.$Message.info("修改成功");
-          }.bind(this)
-        )
-        .catch(function(error) {
-          alert(error);
-        });
     }
   }
 };

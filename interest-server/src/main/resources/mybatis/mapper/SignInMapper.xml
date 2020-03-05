@@ -12,6 +12,13 @@
         <result column="create_time" property="createTime" />
     </resultMap>
 
+    <resultMap id="AttendanceResponse" type="com.interest.model.response.AttendanceResponse">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="createTime" property="createTime" />
+        <result column="workspaceName" property="workspaceName" />
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, state, comment, user_id AS userId, workspace_id AS workspaceId, create_time AS createTime
@@ -32,7 +39,33 @@
     </select>
 
     <select id="getAttendanceManagement" resultMap="AttendanceResponse">
+        SELECT u.`name`,s.create_time, w.`name`
+        FROM sys_user u,sign_in s
+        LEFT JOIN workspace w on s.workspace_id = w.id
+        <where>
+            u.id = s.user_id
+            <if test="searchContent != '' and searchContent != null">
+                and u.`name` like CONCAT('%',#{searchContent},'%')
+            </if>
+            <if test="dateTimestamp != '' and dateTimestamp != null">
+                and s.create_time = '#{dateTimestamp}'
+            </if>
+        </where>
+        order by s.create_time desc
+        limit #{pageWrapper.start},#{pageWrapper.pageSize}
+    </select>
 
+    <select id="getAttendanceSizeOnManagement" resultType="Integer">
+        select count(1) from sign_in s,sys_user u
+        <where>
+            u.id = s.user_id
+            <if test="searchContent != '' and searchContent != null">
+                and  u.`name` like CONCAT('%',#{searchContent},'%')
+            </if>
+            <if test="dateTimestamp != '' and dateTimestamp != null">
+                and s.create_time = #{dateTimestamp}
+            </if>
+        </where>
     </select>
 
 
