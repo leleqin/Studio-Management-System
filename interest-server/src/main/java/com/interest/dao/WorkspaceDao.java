@@ -33,4 +33,14 @@ public interface WorkspaceDao {
      * @param workspaceEntity
      */
     void updateWorkspace(@Param("workspaceEntity") WorkspaceEntity workspaceEntity);
+
+    /**
+     * 新建工作室资产
+     * @param assetsEntity
+     */
+    void insertAssets(@Param("assetsEntity") AssetsEntity assetsEntity);
+
+    void deleteAssets(@Param("groupId") List<String> groupId);
+
+    void updateAssets(@Param("assetsEntity") AssetsEntity assetsEntity);
 }

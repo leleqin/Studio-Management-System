@@ -108,4 +108,46 @@ public class WorkspaceController {
         pageResult.setTotalCount(workspaceService.assetsSize(pageSize, page * pageSize));
         return new ResponseWrapper<>(pageResult);
     }
+
+    /**
+     * 新建工作室资产
+     * @param assetsEntity
+     * @return
+     */
+    @InterestLog
+    @PostMapping("/assets/insertAssets")
+    public ResponseWrapper<AssetsEntity> insertAssets(@RequestBody AssetsEntity assetsEntity) {
+        workspaceService.insertAssets(assetsEntity);
+        log.debug("The method is ending");
+        return new ResponseWrapper<>(assetsEntity);
+    }
+
+    /**
+     * 删除工作室资产
+     * @param groupId
+     * @return
+     */
+    @InterestLog
+    @DeleteMapping("/assets")
+    public ResponseWrapper<List<String>> deleteAssets(@RequestBody List<String> groupId) {
+        workspaceService.deleteAssets(groupId);
+        return new ResponseWrapper<>(groupId);
+    }
+
+
+    /**
+     * 更新工作室资产
+     * @param assetsEntity
+     * @param id
+     * @return
+     */
+    @InterestLog
+    @PutMapping("/assets/{id}")
+    public ResponseWrapper<AssetsEntity> updateAssets(@RequestBody AssetsEntity assetsEntity, @PathVariable int id) {
+        if (assetsEntity.getId() == id) {
+            workspaceService.updateAssets(assetsEntity);
+        }
+        log.debug("The method is ending");
+        return new ResponseWrapper<>(assetsEntity);
+    }
 }

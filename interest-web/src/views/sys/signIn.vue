@@ -13,12 +13,18 @@
   <div style="margin: 40px;">
     <div>
       <Row style="margin-bottom: 25px;">
-        <Col span="9">搜索：
-            <Input v-model="searchContent" placeholder="请输入..." style="width:300px" />
-          </Col>
+        <Col span="9">
+          搜索：
+          <Input v-model="searchContent" placeholder="请输入..." style="width:300px" />
+        </Col>
         <Col span="6">
-         <!-- v-model="date" -->
-          <DatePicker @on-change='handleChange' type="date" placeholder="Select date" style="width: 200px"></DatePicker>
+          <!-- v-model="date" -->
+          <DatePicker
+            @on-change="handleChange"
+            type="date"
+            placeholder="Select date"
+            style="width: 200px"
+          ></DatePicker>
         </Col>
         <Col span="4">
           <Button type="primary" shape="circle" icon="ios-search" @click="search()">搜索</Button>
@@ -98,8 +104,8 @@ export default {
     });
   },
   methods: {
-    handleChange(daterange){
-        this.date = daterange;
+    handleChange(daterange) {
+      this.date = daterange;
     },
     /*pageInfo实体初始化*/
     initPageInfo() {
@@ -121,12 +127,13 @@ export default {
           page: e.pageInfo.page,
           pageSize: e.pageInfo.pageSize
         }
-      }).then(
+      })
+        .then(
           function(response) {
             this.data1 = response.data.data.data;
             this.total = response.data.data.totalCount;
             for (var i = this.data1.length - 1; i >= 0; i--) {
-              console.log("date:"+ this.data1[i].createTime);
+              console.log("date:" + this.data1[i].createTime);
               this.data1[i].createTime = this.dateGet(this.data1[i].createTime);
             }
           }.bind(this)

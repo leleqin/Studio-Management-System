@@ -56,5 +56,20 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         workspaceDao.updateWorkspace(workspaceEntity);
     }
 
+    @Override
+    public void insertAssets(AssetsEntity assetsEntity) {
+        workspaceDao.insertAssets(assetsEntity);
+    }
+
+    @Override
+    public void deleteAssets(List<String> groupId) {
+        workspaceDao.deleteAssets(groupId);
+    }
+
+    @Override
+    public void updateAssets(AssetsEntity assetsEntity) {
+        workspaceDao.updateAssets(assetsEntity);
+    }
+
 
 }

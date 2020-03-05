@@ -56,4 +56,14 @@ public interface WorkspaceService {
     * @param workspaceEntity
      */
     void updateWorkspace(WorkspaceEntity workspaceEntity);
+
+    /**
+     * 新建工作室资产
+     * @param assetsEntity
+     */
+    void insertAssets(AssetsEntity assetsEntity);
+
+    void deleteAssets(List<String> groupId);
+
+    void updateAssets(AssetsEntity assetsEntity);
 }

@@ -82,4 +82,36 @@
         select count(*) from assets
         ]]>
 	</select>
+    <!--新建assets-->
+    <insert id="insertAssets">
+		insert into assets
+		(name,type,userid,number,abrasion)
+		values
+		(#{assetsEntity.name},#{assetsEntity.type},#{assetsEntity.userId},#{assetsEntity.number},#{assetsEntity.abrasion})
+	</insert>
+    <delete id="deleteAssets">
+        delete from assets
+        <where>
+            <if test="groupId !=null">
+                id in
+                <foreach collection="groupId" item="item" index="index"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+    <!--更新工作室信息-->
+    <update id="updateAssets">
+        update assets set
+        name = #{assetsEntity.name},
+        type = #{assetsEntity.type},
+        userid = #{assetsEntity.userId},
+        number = #{assetsEntity.number},
+        abrasion = #{assetsEntity.abrasion}
+        <where>
+            id = #{assetsEntity.id}
+        </where>
+    </update>
+
 </mapper>
