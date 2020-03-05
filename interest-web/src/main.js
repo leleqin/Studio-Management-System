@@ -22,6 +22,9 @@ Vue.use(base);
 Vue.use(VueAxios, axios);
 Vue.use(iView);
 Vue.use(VueQuillEditor);
+import ECharts from "vue-echarts";
+import "echarts/lib/chart/line";
+Vue.component("chart", ECharts);
 
 Vue.config.productionTip = false;
 

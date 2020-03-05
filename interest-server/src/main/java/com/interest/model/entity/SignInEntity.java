@@ -22,4 +22,6 @@ public class SignInEntity {
 
     private Date createTime;
 
+    private String total;
+
 }

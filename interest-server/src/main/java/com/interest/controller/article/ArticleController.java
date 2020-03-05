@@ -16,7 +16,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ArticleController {
@@ -125,6 +127,28 @@ public class ArticleController {
         String pictureUrl = pictureService.saveImage(picture);
 
         return new ResponseWrapper<>(pictureUrl);
+    }
+
+    @InterestLog
+    @GetMapping("/base/getMonthlyArticles")
+    public Map<String,Object> getMonthlyArticles(){
+        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> data = articleService.getMonthlyArticles();
+        System.out.println(data);
+        map.put("data",data);
+        map.put("state",200);
+        return map;
+    }
+
+    @InterestLog
+    @GetMapping("/base/getWeeklySignIn")
+    public Map<String,Object> getWeeklySignIn(){
+        Map<String,Object> map = new HashMap<>();
+        List<Map> data = articleService.getWeeklySignIn();
+        System.out.println(data);
+        map.put("data",data);
+        map.put("state",200);
+        return map;
     }
 
 }

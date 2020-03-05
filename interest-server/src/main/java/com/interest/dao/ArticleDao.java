@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface ArticleDao {
@@ -39,4 +40,8 @@ public interface ArticleDao {
     void updateArticlesDelByIdAndUserId(@Param("userId") int userId,@Param("articleId") int articleId);
 
     void updateArticle(ArticleEntity articleEntity);
+
+    Map<String,Object> getMonthlyArticles();
+
+    List<Map>getWeeklySignIn();
 }

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @Service
@@ -170,5 +171,15 @@ public class ArticleServiceImpl implements ArticleService {
         textStr = textStr.replaceAll("[ ]+", " ");
         textStr = textStr.replaceAll("(?m)^\\s*$(\\n|\\r\\n)", "");
         return textStr;// 返回文本字符串
+    }
+
+    @Override
+    public Map<String,Object> getMonthlyArticles() {
+        return articleDao.getMonthlyArticles();
+    }
+
+    @Override
+    public  List<Map> getWeeklySignIn() {
+        return articleDao.getWeeklySignIn();
     }
 }

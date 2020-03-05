@@ -189,4 +189,35 @@
         </where>
     </update>
 
+    <select id="getMonthlyArticles" resultType="Map">
+        SELECT
+           SUM(CASE MONTH(create_time) WHEN '1'  THEN 1 ELSE 0 END) AS '1',
+           SUM(CASE MONTH(create_time) WHEN '2'  THEN 1 ELSE 0 END) AS '2',
+           SUM(CASE MONTH(create_time) WHEN '3'  THEN 1 ELSE 0 END) AS '3',
+           SUM(CASE MONTH(create_time) WHEN '4'  THEN 1 ELSE 0 END) AS '4',
+           SUM(CASE MONTH(create_time) WHEN '5'  THEN 1 ELSE 0 END) AS '5',
+           SUM(CASE MONTH(create_time) WHEN '6'  THEN 1 ELSE 0 END) AS '6',
+           SUM(CASE MONTH(create_time) WHEN '7'  THEN 1 ELSE 0 END) AS '7',
+           SUM(CASE MONTH(create_time) WHEN '8'  THEN 1 ELSE 0 END) AS '8',
+           SUM(CASE MONTH(create_time) WHEN '9'  THEN 1 ELSE 0 END) AS '9',
+           SUM(CASE MONTH(create_time) WHEN '10' THEN 1  ELSE 0 END) AS '10',
+           SUM(CASE MONTH(create_time) WHEN '11' THEN 1  ELSE 0 END) AS '11',
+           SUM(CASE MONTH(create_time) WHEN '12' THEN 1  ELSE 0 END) AS '12'
+         FROM article
+         WHERE YEAR(create_time)='2020';
+    </select>
+
+    <resultMap id="SignIn" type="com.interest.model.entity.SignInEntity">
+        <id column="id" property="id"/>
+        <result column="createTime" property="createTime"/>
+        <result column="total" property="total"/>
+    </resultMap>
+
+    <select id="getWeeklySignIn" resultMap="SignIn">
+        SELECT DATE(create_time) createTime,COUNT(*) total
+        FROM sign_in
+        WHERE <![CDATA[ DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= DATE(create_time) ]]>
+        GROUP BY createtime;
+    </select>
+
 </mapper>

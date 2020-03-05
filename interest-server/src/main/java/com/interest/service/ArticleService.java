@@ -7,6 +7,7 @@ import com.interest.model.response.ArticleDetailResponse;
 import com.interest.model.utils.PageWrapper;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ArticleService {
 
@@ -29,4 +30,8 @@ public interface ArticleService {
     void updateArticlesDelById(int articleId);
 
     void updateArticle(ArticleUpdateRequest articleCreateRequest);
+
+    Map<String,Object> getMonthlyArticles();
+
+    List<Map> getWeeklySignIn();
 }
