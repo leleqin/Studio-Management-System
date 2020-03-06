@@ -106,6 +106,7 @@ public class UserController {
     @InterestLog
     @PutMapping("/users/user")
     public ResponseWrapper<UserEntity> updateUsertype(@RequestBody UserEntity userEntity) {
+        System.out.print(userEntity);
         userService.updateUsertype(userEntity);
         log.debug("The method is ending");
         return new ResponseWrapper<>(userEntity);

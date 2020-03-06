@@ -11,6 +11,7 @@
         <result column="headimg" property="headimg"/>
         <result column="url" property="url"/>
         <result column="create_time" property="createTime"/>
+        <result column="workspaceName" property="workspaceName"/>
         <result column="githubid" property="githubid"/>
         <result column="qqid" property="qqid"/>
     </resultMap>
@@ -27,10 +28,11 @@
     </resultMap>
     <!-- 获取user列表 -->
     <select id="usersList" resultMap="userMap">
-        <![CDATA[select * from sys_user]]>
+        <![CDATA[SELECT u.*,w.`name` workspaceName from sys_user u,workspace w]]>
         <where>
+            u.workspaceId = w.id
             <if test="name != null and name != ''">
-                name = #{name}
+               and u.name = #{name}
             </if>
         </where>
         <![CDATA[ order by id desc ]]>
@@ -40,13 +42,15 @@
     </select>
     <!-- 获取user列表的总量 -->
     <select id="usersSize" resultType="Integer">
-        <![CDATA[select count(*) from sys_user]]>
+        <![CDATA[SELECT count(*) from sys_user u,workspace w]]>
         <where>
+            u.workspaceId = w.id
             <if test="name != null and name != ''">
-                name = #{name}
+               and u.name = #{name}
             </if>
         </where>
     </select>
+
     <insert id="insert">
         <if test="userEntity != null">
             insert into sys_user (name,sex,age) values
@@ -89,9 +93,9 @@
                    order="AFTER">
             select LAST_INSERT_ID()
         </selectKey>
-        insert into sys_user (name,login_name,password,email,usertype,headimg,url,create_time,githubid)
+        insert into sys_user (name,login_name,password,email,usertype,headimg,url,create_time,workspaceId,githubid)
         values
-        (#{name},#{loginName},#{password},#{email},#{usertype},#{headimg},#{url},#{createTime},#{githubid})
+        (#{name},#{loginName},#{password},#{email},#{usertype},#{headimg},#{url},#{createTime},#{workspaceId},#{githubid})
     </insert>
     <!-- 更新用户信息 -->
     <update id="updateUser" parameterType="UserEntity">
@@ -108,7 +112,8 @@
     </update>
     <update id="updateUsertype">
         update sys_user set
-        usertype = #{usertype}
+        usertype = #{usertype},
+        workspaceId = #{workspaceId}
         <where>
             login_name = #{loginName}
         </where>

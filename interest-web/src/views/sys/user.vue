@@ -111,6 +111,19 @@
             </Form-item>
           </Col>
         </Row>
+        <Row>
+          <Col span="12">
+            <Form-item label="菜单名称:" prop="workspaceId">
+              <Select v-model="userNew.workspaceId" filterable clearable style="width: 200px">
+                <Option
+                  v-for="item in workspaceList"
+                  :value="item.value"
+                  :key="item.value"
+                >{{ item.label }}</Option>
+              </Select>
+            </Form-item>
+          </Col>
+        </Row>
       </Form>
     </Modal>
     <!--修改modal-->
@@ -123,7 +136,7 @@
       @on-ok="modifyOk('modifyModal')"
       @on-cancel="cancel()"
     >
-      <Form :label-width="80">
+      <Form :label-width="100">
         <Row>
           <Col span="12">
             <Form-item label="登录名:">
@@ -137,6 +150,19 @@
               <Select v-model="userModify.usertype" style="width:200px">
                 <Option :value="0">普通用户</Option>
                 <Option :value="1">管理员</Option>
+              </Select>
+            </Form-item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+            <Form-item label="所属工作室:">
+              <Select v-model="userModify.workspaceId" style="width:200px">
+                <Option
+                  v-for="item in workspaceList"
+                  :value="item.value"
+                  :key="item.value"
+                >{{ item.label }}</Option>
               </Select>
             </Form-item>
           </Col>
@@ -177,6 +203,8 @@ export default {
       total: 0,
       /*loading*/
       loading: true,
+      /*用于查找的工作室ID*/
+      workspaceId: null,
       /*pageInfo实体*/
       pageInfo: {
         page: 0,
@@ -190,7 +218,8 @@ export default {
         password: null,
         passwordAgain: null,
         email: null,
-        usertype: null
+        usertype: null,
+        workspaceId: null
       },
       /*用于添加的user实体*/
       userNew: {
@@ -200,13 +229,15 @@ export default {
         password: null,
         passwordAgain: null,
         email: null,
-        usertype: null
+        usertype: null,
+        workspaceId: null
       },
       /*用于修改的user实体*/
       userModify: {
         id: null,
         name: null,
-        usertype: null
+        usertype: null,
+        workspaceId: null
       },
       /*新建验证*/
       ruleNew: {
@@ -301,7 +332,7 @@ export default {
         {
           title: "url",
           key: "url",
-          width: 300,
+          width: 230,
           render: (h, params) => {
             return h(
               "a",
@@ -332,6 +363,10 @@ export default {
           }
         },
         {
+          title: "所属工作室",
+          key: "workspaceName"
+        },
+        {
           title: "注册时间",
           key: "createTime"
         },
@@ -359,6 +394,8 @@ export default {
           }
         }
       ],
+      /*菜单列表*/
+      workspaceList: [],
       /*表数据*/
       data1: [],
       /*表显示字段*/
@@ -392,6 +429,10 @@ export default {
       pageInfo: this.pageInfo,
       name: this.name
     });
+    this.getWorkspace({
+      pageInfo: this.pageInfo,
+      workspaceId: this.workspaceId
+    });
     this.axios({
       method: "get",
       url: "/roles/all"
@@ -419,6 +460,7 @@ export default {
       this.user.password = null;
       this.user.email = null;
       this.user.usertype = null;
+      this.user.workspaceId = null;
     },
     /*userNew实体初始化*/
     initUserNew() {
@@ -429,6 +471,7 @@ export default {
       this.userNew.passwordAgain = null;
       this.userNew.email = null;
       this.userNew.usertype = null;
+      this.userNew.workspaceId = null;
     },
     /*userModify实体初始化*/
     initUserModify() {
@@ -437,6 +480,7 @@ export default {
       this.userModify.loginName = null;
       this.userModify.password = null;
       this.userModify.email = null;
+      this.userModify.workspaceId = null;
     },
     /*userNew设置*/
     userSet(e) {
@@ -446,6 +490,7 @@ export default {
       this.user.password = e.password;
       this.user.email = e.email;
       this.user.usertype = e.usertype;
+      this.user.workspaceId = e.workspaceId;
     },
     /*userNew设置*/
     userNewSet(e) {
@@ -456,12 +501,14 @@ export default {
       this.userNew.passwordAgain = e.passwordAgain;
       this.userNew.email = e.email;
       this.userNew.usertype = e.usertype;
+      this.userNew.workspaceId = e.workspaceId;
     },
     /*userModify设置*/
     userModifySet(e) {
       this.userModify.id = e.id;
       this.userModify.name = e.name;
       this.userModify.usertype = e.usertype;
+      this.userModify.workspaceId = e.workspaceId;
     },
     dateGet(e) {
       var time = new Date(parseInt(e));
@@ -504,6 +551,32 @@ export default {
           console.log(error);
         });
     },
+    getWorkspace(e) {
+      this.axios({
+        method: "get",
+        url: "/workspaces",
+        params: {
+          page: e.pageInfo.page,
+          pageSize: e.pageInfo.pageSize,
+          workspaceId: this.workspaceId
+        }
+      })
+        .then(
+          function(response) {
+            var listTemp = response.data.data.data;
+            console.log(listTemp);
+            for (var i = 0; i < listTemp.length; i++) {
+              this.workspaceList.push({
+                value: listTemp[i].id,
+                label: listTemp[i].name
+              });
+            }
+          }.bind(this)
+        )
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
     /*搜索按钮点击事件*/
     search() {
       this.initPageInfo();
@@ -530,7 +603,6 @@ export default {
     },
     /*新建modal的newOk点击事件*/
     newOk(userNew) {
-      // console.log("11111111113");
       this.$refs[userNew].validate(valid => {
         if (valid) {
           if (this.userNew.password == this.userNew.passwordAgain) {
@@ -592,7 +664,8 @@ export default {
         data: {
           name: this.userModify.name,
           usertype: this.userModify.usertype,
-          id: this.userModify.id
+          id: this.userModify.id,
+          workspaceId: this.userModify.workspaceId
         }
       })
         .then(

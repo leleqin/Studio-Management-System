@@ -44,6 +44,10 @@ public class UserEntity {
      */
     private String createTime;
 
+    private String workspaceName;
+
+    private Integer workspaceId;
+
     private String githubid;
 
     private String qqid;
