@@ -200,7 +200,7 @@ export default {
           {
             type: "string",
             required: true,
-            message: "输入设备名称",
+            message: "输入财产名称",
             trigger: "blur"
           }
         ],
@@ -208,12 +208,12 @@ export default {
           {
             type: "string",
             required: true,
-            message: "输入设备类型",
+            message: "输入财产类型",
             trigger: "blur"
           }
         ],
         number: [
-          { required: true, message: "输入设备数量", trigger: "blur" },
+          { required: true, message: "输入财产数量", trigger: "blur" },
           {
             validator(rule, value, callback) {
               if (!Number.isInteger(+value)) {
@@ -258,7 +258,7 @@ export default {
           {
             type: "string",
             required: true,
-            message: "输入工作室名称",
+            message: "输入财产名称",
             trigger: "blur"
           }
         ],
@@ -266,12 +266,12 @@ export default {
           {
             type: "string",
             required: true,
-            message: "输入设备类型",
+            message: "输入财产类型",
             trigger: "blur"
           }
         ],
         number: [
-          { required: true, message: "输入设备数量", trigger: "blur" },
+          { required: true, message: "输入财产数量", trigger: "blur" },
           {
             validator(rule, value, callback) {
               if (!Number.isInteger(+value)) {

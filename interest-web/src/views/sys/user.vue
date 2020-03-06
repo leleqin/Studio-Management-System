@@ -189,7 +189,8 @@ export default {
         loginName: null,
         password: null,
         passwordAgain: null,
-        email: null
+        email: null,
+        usertype: null
       },
       /*用于添加的user实体*/
       userNew: {
@@ -417,6 +418,7 @@ export default {
       this.user.loginName = null;
       this.user.password = null;
       this.user.email = null;
+      this.user.usertype = null;
     },
     /*userNew实体初始化*/
     initUserNew() {
@@ -443,6 +445,7 @@ export default {
       this.user.loginName = e.loginName;
       this.user.password = e.password;
       this.user.email = e.email;
+      this.user.usertype = e.usertype;
     },
     /*userNew设置*/
     userNewSet(e) {
@@ -530,8 +533,6 @@ export default {
       // console.log("11111111113");
       this.$refs[userNew].validate(valid => {
         if (valid) {
-          console.log(this.userNew.password);
-          console.log(this.userNew);
           if (this.userNew.password == this.userNew.passwordAgain) {
             this.initUser();
             this.userSet(this.userNew);
@@ -551,7 +552,7 @@ export default {
                 }.bind(this)
               )
               .catch(function(error) {
-                alert(error);
+                alert("该用户已注册");
               });
             this.newModal = false;
           } else {

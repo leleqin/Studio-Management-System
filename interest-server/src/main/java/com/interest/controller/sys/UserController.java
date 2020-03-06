@@ -83,7 +83,6 @@ public class UserController {
     @InterestLog
     @PostMapping("/register")
     public ResponseWrapper<UserEntity> register(@RequestBody UserEntity userEntity) {
-        userEntity.setUsertype(0);
         System.out.println(userEntity);
         userService.insertUser(userEntity);
         log.debug("The method is ending");

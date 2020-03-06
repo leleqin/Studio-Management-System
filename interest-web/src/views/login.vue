@@ -1,4 +1,4 @@
-<style scoped>
+<style>
 .index {
   align-items: center;
   display: flex;
@@ -122,31 +122,31 @@
                     @click="login('formLogin')"
                     style="width: 300px;height:40px; margin-top:80px;"
                   >登录</Button>
-                  <Button
+                  <!-- <Button
                     type="primary"
                     @click="register()"
                     style="width: 300px;height:40px;margin-top:20px;"
-                  >注册</Button>
-                  <ul class="account-list">
-                    <li>
+                  >注册</Button>-->
+                  <!-- <ul class="account-list"> -->
+                  <!-- <li>
                       <a
                         href="https://github.com/login/oauth/authorize?client_id=bbb5cc2034eb62484c1c&state=github"
                         style="{right: 26px;}"
                       >
-                        <!-- <Icon  style="color: rebeccapurple;" size="40" type="social-github"></Icon> -->
-                        <img class="icon" src="../images/GitHub.svg" />
+                  <!-- <Icon  style="color: rebeccapurple;" size="40" type="social-github"></Icon>-->
+                  <!-- <img class="icon" src="../images/GitHub.svg" />
                       </a>
-                    </li>
+                  </li>-->
 
-                    <li>
+                  <!-- <li>
                       <a
                         href="https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101512648&redirect_uri=http://www.lovemtt.com/qq&state=qq"
                         style="{right: 26px;}"
                       >
                         <img class="icon" src="../images/social-qq.svg" />
                       </a>
-                    </li>
-                  </ul>
+                  </li>-->
+                  <!-- </ul> -->
                 </FormItem>
               </dl>
             </li>

@@ -12,6 +12,7 @@ import com.interest.picture.PictureService;
 import com.interest.properties.PathsProperties;
 import com.interest.service.UserDetailService;
 import com.interest.service.UserService;
+import com.interest.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +83,8 @@ public class UserServiceImpl implements UserService {
 		}*/
         //userEntity.setPassword(new Md5PasswordEncoder().encodePassword(userEntity.getPassword(), null));
         userEntity.setPassword("{bcrypt}" + new BCryptPasswordEncoder().encode(userEntity.getPassword()));
-        System.out.println(userEntity.getPassword());
+        userEntity.setCreateTime(DateUtil.currentTimestamp());
+        System.out.println(userEntity.getPassword()+" date: "+ userEntity.getCreateTime());
         userDao.insertUser(userEntity);
     }
 
