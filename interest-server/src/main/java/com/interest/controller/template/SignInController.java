@@ -5,6 +5,7 @@ import com.interest.model.utils.PageResult;
 import com.interest.model.utils.PageWrapper;
 import com.interest.model.utils.ResponseWrapper;
 import com.interest.service.SignInService;
+import com.interest.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,10 +39,14 @@ public class SignInController {
      * @return
      */
     @PostMapping("/addSignIn")
-    public String addSignIn(@RequestParam(value = "signState")Integer signState, @RequestParam(value = "userId")Integer userId, SignInEntity signInEntity){
+    public String addSignIn(@RequestParam(value = "signState")Integer signState,
+                            @RequestParam(value = "userId")Integer userId,
+                            @RequestParam(value = "workspaceId")Integer workspaceId,
+                            SignInEntity signInEntity){
         try {
             signInEntity.setUserId(userId);
             signInEntity.setState(signState);
+            signInEntity.setWorkspaceId(workspaceId);
             signInEntity.setCreateTime(new Date());
             //学生签到的同时给表新增一条数据
             signInService.insert(signInEntity);

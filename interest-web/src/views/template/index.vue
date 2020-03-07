@@ -245,6 +245,7 @@ export default {
       emailModal: false,
       stateModal: false,
       userId: 0,
+      userWorkspaceId: 0,
       //用户未读消息个数
       unreadMsgCount: 0,
       email: {
@@ -319,6 +320,8 @@ export default {
               this.loginFlag = true;
               this.userSet(response.data.data);
               this.userId = response.data.data.id;
+              // console.log(response.data.data.workspaceId);
+              this.userWorkspaceId = response.data.data.workspaceId;
               if (response.data.data.usertype != 0) {
                 this.consoleFlag = true;
               }
@@ -344,22 +347,21 @@ export default {
             this.$Message.error("无权限");
           }.bind(this)
         );
- 
     },
-    stateGet(){
+    stateGet() {
       let _this = this;
       this.axios({
         method: "get",
         url: "/sign/isSignInToday",
         params: {
-          userId: this.userId,
+          userId: this.userId
         }
       })
         .then(
           function(response) {
-            if(response.data.isSign == true){
-            this.stateFlag = true;
-            }else{
+            if (response.data.isSign == true) {
+              this.stateFlag = true;
+            } else {
               this.stateFlag = false;
             }
           }.bind(this)
@@ -452,12 +454,13 @@ export default {
         params: {
           signState: 1,
           userId: this.userId,
+          workspaceId: this.userWorkspaceId
         }
       })
         .then(
           function(response) {
             this.$Message.info("签到成功");
-            if(response.data == "签到成功"){
+            if (response.data == "签到成功") {
               this.stateFlag = true;
               // console.log(this.stateModal);
             }
@@ -468,7 +471,7 @@ export default {
             alter(error);
           }.bind(this)
         );
-        this.stateModal = false;
+      this.stateModal = false;
     },
     /*登录*/
     login(code, state) {

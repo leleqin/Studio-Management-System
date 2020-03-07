@@ -15,7 +15,7 @@
     <resultMap id="AttendanceResponse" type="com.interest.model.response.AttendanceResponse">
         <id column="id" property="id" />
         <result column="name" property="name" />
-        <result column="createTime" property="createTime" />
+        <result column="create_time" property="createTime" />
         <result column="workspaceName" property="workspaceName" />
     </resultMap>
 
@@ -39,7 +39,7 @@
     </select>
 
     <select id="getAttendanceManagement" resultMap="AttendanceResponse">
-        SELECT u.`name`,s.create_time, w.`name`
+        SELECT u.`name`,s.create_time, w.`name` workspaceName
         FROM sys_user u,sign_in s
         LEFT JOIN workspace w on s.workspace_id = w.id
         <where>

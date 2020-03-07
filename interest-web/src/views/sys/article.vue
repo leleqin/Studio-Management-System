@@ -1,53 +1,73 @@
 <style>
-  .del-select {
-    margin-bottom: 25px;
-  }
-  .del-select span{
-    margin-right: 5px;
-  }
-  .botton-layout {
-    margin-right: 5px;
-  }
+.del-select {
+  margin-bottom: 25px;
+}
+.del-select span {
+  margin-right: 5px;
+}
+.botton-layout {
+  margin-right: 5px;
+}
 </style>
 <template>
-	<div style="margin: 40px;">
+  <div style="margin: 40px;">
     <div>
       <Row style="margin-bottom: 25px;">
-          <Col span="9">搜索：
-            <Input v-model="searchContent" placeholder="请输入..." style="width:300px" />
-          </Col>
-          <Col span="6">
-            <DatePicker v-model="date" type="date" placeholder="Select date" style="width: 200px"></DatePicker>
-          </Col>
-          <Col span="4"><Button type="primary" shape="circle" icon="ios-search" @click="search()">搜索</Button></Col>
+        <Col span="9">
+          搜索：
+          <Input v-model="searchContent" placeholder="请输入文章标题或简介进行模糊查询" style="width:300px" />
+        </Col>
+        <!-- <Col span="6">
+          <DatePicker
+            @on-change="handleChange"
+            type="date"
+            placeholder="Select date"
+            style="width: 200px"
+          ></DatePicker>
+        </Col>-->
+        <Col span="4">
+          <Button type="primary" shape="circle" icon="ios-search" @click="search()">搜索</Button>
+        </Col>
       </Row>
-    </div> 
+    </div>
     <!-- <div class="del-select">
       <span>删除：</span>
       <i-switch size="large" v-model="del" @on-change="switchChange()">
         <span slot="open">开启</span>
         <span slot="close">关闭</span>
       </i-switch>
-    </div> -->
+    </div>-->
     <div>
-        <ul>
-        	<li>
-                <!-- <Button v-if="!del" type="error" icon="md-trash" class="botton-layout" @click="clickDel()">删除</Button>
-                <Button v-if="del" type="success" icon="md-build" class="botton-layout" @click="republish()">恢复</Button> -->
-                <Button type="info" icon="md-build" class="botton-layout" @click="top(1)">置顶</Button>
-                <Button type="info" icon="md-build" class="botton-layout" @click="top(0)">取消置顶</Button>
-            </li>
-            <li>
-                <div style="padding: 10px 0;">
-                	<Table border :columns="columns1" :data="data1" :height="400" @on-selection-change="s=>{change(s)}"></Table>
-                </div> 
-            </li>
-            <li>
-                <div style="text-align: right;">
-                    <Page :total="total" :page-size="pageInfo.pageSize" show-elevator show-total @on-change="e=>{pageSearch(e)}"></Page>
-                </div>  
-            </li>
-        </ul>
+      <ul>
+        <li>
+          <!-- <Button v-if="!del" type="error" icon="md-trash" class="botton-layout" @click="clickDel()">删除</Button>
+          <Button v-if="del" type="success" icon="md-build" class="botton-layout" @click="republish()">恢复</Button>-->
+          <Button type="info" icon="md-build" class="botton-layout" @click="top(1)">置顶</Button>
+          <Button type="info" icon="md-build" class="botton-layout" @click="top(0)">取消置顶</Button>
+        </li>
+        <li>
+          <div style="padding: 10px 0;">
+            <Table
+              border
+              :columns="columns1"
+              :data="data1"
+              :height="400"
+              @on-selection-change="s=>{change(s)}"
+            ></Table>
+          </div>
+        </li>
+        <li>
+          <div style="text-align: right;">
+            <Page
+              :total="total"
+              :page-size="pageInfo.pageSize"
+              show-elevator
+              show-total
+              @on-change="e=>{pageSearch(e)}"
+            ></Page>
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -55,9 +75,9 @@
 export default {
   data() {
     return {
-      date:null,
-      searchContent:null,
-      del:false,
+      date: null,
+      searchContent: null,
+      del: false,
       groupId: [],
       /*分页total属性绑定值*/
       total: 0,
@@ -173,6 +193,10 @@ export default {
     });
   },
   methods: {
+    handleChange(daterange) {
+      this.date = new Date(daterange).getTime();
+      console.log(this.date);
+    },
     /*pageInfo实体初始化*/
     initPageInfo() {
       this.pageInfo.page = 0;
@@ -181,11 +205,11 @@ export default {
     /*得到表数据*/
     getTable(e) {
       var dateTimestamp = null;
-      if(this.date != null && this.date != ''){
-        dateTimestamp = this.date.getTime();
+      if (this.date != null && this.date != "") {
+        dateTimestamp = this.date;
       }
       var delSign = 0;
-      if(this.del){
+      if (this.del) {
         delSign = 1;
       }
       this.axios({
@@ -193,6 +217,7 @@ export default {
         url: "/admin/articles",
         params: {
           dateTimestamp: dateTimestamp,
+          // dateTimestamp: 1583504723405,
           searchContent: this.searchContent,
           del: delSign,
           page: e.pageInfo.page,
@@ -253,18 +278,18 @@ export default {
           url: "/admin/articles",
           data: this.groupId
         })
-        .then(
-          function(response) {
-            this.getTable({
-              pageInfo: this.pageInfo
-            });
-            this.groupId = [];
-            this.$Message.info("重新发布成功");
-          }.bind(this)
-        )
-        .catch(function(error) {
-          alert(error);
-        });
+          .then(
+            function(response) {
+              this.getTable({
+                pageInfo: this.pageInfo
+              });
+              this.groupId = [];
+              this.$Message.info("重新发布成功");
+            }.bind(this)
+          )
+          .catch(function(error) {
+            alert(error);
+          });
       }
     },
     change(e) {
@@ -276,13 +301,13 @@ export default {
         this.groupId.push(e[i].id);
       }
     },
-    switchChange(){
+    switchChange() {
       this.groupId = [];
       this.getTable({
         pageInfo: this.pageInfo
       });
     },
-    top(e){
+    top(e) {
       this.axios({
         method: "patch",
         url: "/admin/articles/top",
@@ -291,18 +316,18 @@ export default {
           top: e
         }
       })
-      .then(
-        function(response) {
-          this.getTable({
-            pageInfo: this.pageInfo
-          });
-          this.groupId = [];
-          this.$Message.info("修改成功");
-        }.bind(this)
-      )
-      .catch(function(error) {
-        alert(error);
-      });
+        .then(
+          function(response) {
+            this.getTable({
+              pageInfo: this.pageInfo
+            });
+            this.groupId = [];
+            this.$Message.info("修改成功");
+          }.bind(this)
+        )
+        .catch(function(error) {
+          alert(error);
+        });
     }
   }
 };

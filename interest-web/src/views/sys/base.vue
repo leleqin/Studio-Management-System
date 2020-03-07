@@ -136,7 +136,7 @@
         </div>
         <div class="layout-breadcrumb">
           <Breadcrumb>
-            <BreadcrumbItem to="/base/welcome">Home</BreadcrumbItem>
+            <BreadcrumbItem to="/base">Home</BreadcrumbItem>
             <BreadcrumbItem
               v-for="item in breadcrumbData"
               :to="item.url"

@@ -13,11 +13,6 @@
 
 spring boot项目,与我的另外一个前端项目[interest-web](https://github.com/smallsnail-wh/interest/tree/master/interest-web)搭配（前后端分离）。
 
-## 项目展示
-
-地址：http://www.lovemtt.com/
-可使用github登录
-（第一次打开可能会有点慢）
 
 项目目录结构
 --
@@ -87,7 +82,6 @@ spring boot项目,与我的另外一个前端项目[interest-web](https://github
 ## 注：
 
  1. 此后端是授权服务和资源服务在一个项目中，建议将授权服务和资源服务分离成2个项目。
- 2. 如果你想采用上述建议，但是无从下手，请在我的github中留言。
  
  ## 如果你项目启动有错误：
  

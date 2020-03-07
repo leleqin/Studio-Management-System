@@ -11,7 +11,7 @@ import java.util.List;
 
 @Mapper
 public interface SignInDao {
-    public void insert(SignInEntity signInEntity);
+    void insert(SignInEntity signInEntity);
 
     Integer getSignInCount(@Param("userId") Integer userId);
 

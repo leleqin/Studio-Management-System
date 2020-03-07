@@ -17,15 +17,15 @@
           搜索：
           <Input v-model="searchContent" placeholder="请输入..." style="width:300px" />
         </Col>
-        <Col span="6">
-          <!-- v-model="date" -->
+        <!-- <Col span="6">
+          // v-model="date"
           <DatePicker
             @on-change="handleChange"
             type="date"
             placeholder="Select date"
             style="width: 200px"
           ></DatePicker>
-        </Col>
+        </Col>-->
         <Col span="4">
           <Button type="primary" shape="circle" icon="ios-search" @click="search()">搜索</Button>
         </Col>
@@ -132,10 +132,9 @@ export default {
           function(response) {
             this.data1 = response.data.data.data;
             this.total = response.data.data.totalCount;
-            for (var i = this.data1.length - 1; i >= 0; i--) {
-              console.log("date:" + this.data1[i].createTime);
-              this.data1[i].createTime = this.dateGet(this.data1[i].createTime);
-            }
+            // for (var i = this.data1.length - 1; i >= 0; i--) {
+            //   this.data1[i].createTime = moment(this.data1[i].createTime);
+            // }
           }.bind(this)
         )
         .catch(function(error) {
