@@ -83,7 +83,6 @@ public class UserController {
     @InterestLog
     @PostMapping("/register")
     public ResponseWrapper<UserEntity> register(@RequestBody UserEntity userEntity) {
-        System.out.println(userEntity);
         userService.insertUser(userEntity);
         log.debug("The method is ending");
         return new ResponseWrapper<>(userEntity);
@@ -106,7 +105,6 @@ public class UserController {
     @InterestLog
     @PutMapping("/users/user")
     public ResponseWrapper<UserEntity> updateUsertype(@RequestBody UserEntity userEntity) {
-        System.out.print(userEntity);
         userService.updateUsertype(userEntity);
         log.debug("The method is ending");
         return new ResponseWrapper<>(userEntity);
@@ -164,6 +162,17 @@ public class UserController {
     public ResponseWrapper<String> uploadUserHeadImg(@RequestParam("picture") MultipartFile picture) {
         String pictureUrl = pictureService.saveImage(picture,"/head");
         return new ResponseWrapper<>(pictureUrl);
+    }
+
+    /**
+     * 查询管理员列表
+     * @param usertype
+     * @return
+     */
+    @InterestLog
+    @GetMapping("/getAdmin")
+    public ResponseWrapper<List<UserEntity>> getAdminList(int usertype) {
+        return new ResponseWrapper<>(userService.getAdminList(usertype));
     }
 
 }

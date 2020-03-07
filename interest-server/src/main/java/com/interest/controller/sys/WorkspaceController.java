@@ -53,6 +53,7 @@ public class WorkspaceController {
         return new ResponseWrapper<>(pageResult);
     }
 
+
     /**
      * 新建工作室
      * @param workspaceEntity
@@ -65,6 +66,7 @@ public class WorkspaceController {
         log.debug("The method is ending");
         return new ResponseWrapper<>(workspaceEntity);
     }
+
 
     /**
      * 删除工作室
@@ -102,10 +104,11 @@ public class WorkspaceController {
      */
     @InterestLog
     @GetMapping("/assets")
-    public ResponseWrapper<PageResult> assetsList(@RequestParam("pageSize") int pageSize, @RequestParam("page") int page) {
+    public ResponseWrapper<PageResult> assetsList(int pageSize,int page, String assetsId) {
         PageResult<AssetsEntity> pageResult = new PageResult<>();
         pageResult.setData(workspaceService.assetsList(pageSize, page * pageSize));
         pageResult.setTotalCount(workspaceService.assetsSize(pageSize, page * pageSize));
+        log.debug("The method is ending");
         return new ResponseWrapper<>(pageResult);
     }
 

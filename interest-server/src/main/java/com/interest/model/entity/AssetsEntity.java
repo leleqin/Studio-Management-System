@@ -20,6 +20,8 @@ public class AssetsEntity {
 
     private String userId;
 
+    private String userName;
+
     private String number;
 
     private String abrasion;

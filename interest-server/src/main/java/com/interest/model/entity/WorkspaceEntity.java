@@ -20,6 +20,8 @@ public class WorkspaceEntity {
 
     private Integer userId;
 
+    private String userName;
+
     private String createtime;
 
 }

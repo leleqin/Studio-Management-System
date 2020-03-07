@@ -82,7 +82,7 @@ public interface UserDao {
 
     List<UserEntity> getALl();
 
-    void updateUsertypeById(@Param("id") int id, @Param("usertype") Integer usertype);
+    void updateUsertypeById(@Param("id") int id, @Param("usertype") Integer usertype,@Param("workspaceId") Integer workspaceId);
 
     UserInfoResponse getUserInfoById(@Param("userId") int userId);
 
@@ -95,4 +95,6 @@ public interface UserDao {
     void updateHeadImg(@Param("id") Integer id,@Param("headImg") String headImg);
 
     void updateUserUrlById(@Param("id") int id,@Param("url") String url);
+
+    List<UserEntity> getAdminList(@Param("usertype") int usertype);
 }

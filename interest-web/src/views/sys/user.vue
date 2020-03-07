@@ -113,7 +113,7 @@
         </Row>
         <Row>
           <Col span="12">
-            <Form-item label="菜单名称:" prop="workspaceId">
+            <Form-item label="工作室名称:" prop="workspaceId">
               <Select v-model="userNew.workspaceId" filterable clearable style="width: 200px">
                 <Option
                   v-for="item in workspaceList"

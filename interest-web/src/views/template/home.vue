@@ -60,8 +60,11 @@
           style="background: #f5f7f9;;padding-left: 10px;padding-right: 100px;padding-top: 20px;"
         >
           <Card shadow>
-            <p slot="title">No border title</p>
-            <p>Content of no border type. Content of no border type. Content of no border type. Content of no border type.</p>
+            <p slot="title">校园公告</p>
+            <p>您可以在此系统了解分院的最新资讯</p>
+            <br />
+            <p>在此系统可以记录学习分享知识</p>
+            <br />
           </Card>
         </div>
       </Col>

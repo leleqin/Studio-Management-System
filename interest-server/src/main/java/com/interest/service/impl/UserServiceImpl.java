@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService {
             relationDao.insertRelations(list);
         }
         //userDao.updateUsertype(userEntity.getLoginName(),userEntity.getUsertype());
-        userDao.updateUsertypeById(userEntity.getId(), userEntity.getUsertype());
+        userDao.updateUsertypeById(userEntity.getId(), userEntity.getUsertype(),userEntity.getWorkspaceId());
     }
 
     @Override
@@ -176,6 +176,11 @@ public class UserServiceImpl implements UserService {
     public void updateUserUrl(int id) {
         String url = pathsProperties.getDomainName()+"/page/user/"+id;
         userDao.updateUserUrlById(id,url);
+    }
+
+    @Override
+    public List<UserEntity> getAdminList(int usertype) {
+        return userDao.getAdminList(usertype);
     }
 
 

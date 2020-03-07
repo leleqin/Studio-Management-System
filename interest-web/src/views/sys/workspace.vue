@@ -74,21 +74,13 @@
           </Col>
           <Col span="12">
             <Form-item label="管理人:" prop="userId">
-              <!-- <Input v-model="workspaceNew.userId" style="width: 204px" /> -->
-              <Select v-model="workspaceNew" filterable clearable style="width: 200px">
+              <Select v-model="workspaceNew.userId" filterable clearable style="width: 200px">
                 <Option
-                  v-for="item in workspaceList"
+                  v-for="item in adminList"
                   :value="item.value"
                   :key="item.value"
                 >{{ item.label }}</Option>
               </Select>
-            </Form-item>
-          </Col>
-        </Row>
-        <Row>
-          <Col span="12">
-            <Form-item label="创建时间:" prop="createtime">
-              <Input v-model="workspaceNew.createtime" style="width: 204px" />
             </Form-item>
           </Col>
         </Row>
@@ -129,14 +121,13 @@
           </Col>
           <Col span="12">
             <Form-item label="管理人:" prop="userId">
-              <Input v-model="workspaceModify.userId" style="width: 204px" />
-            </Form-item>
-          </Col>
-        </Row>
-        <Row>
-          <Col span="12">
-            <Form-item label="创建时间:" prop="createtime">
-              <Input v-model="workspaceModify.createtime" style="width: 204px" />
+              <Select v-model="workspaceModify.userId" filterable clearable style="width: 200px">
+                <Option
+                  v-for="item in adminList"
+                  :value="item.value"
+                  :key="item.value"
+                >{{ item.label }}</Option>
+              </Select>
             </Form-item>
           </Col>
         </Row>
@@ -230,22 +221,6 @@ export default {
             },
             trigger: "blur"
           }
-        ],
-        userId: [
-          {
-            type: "string",
-            required: true,
-            message: "输入管理人",
-            trigger: "blur"
-          }
-        ],
-        createtime: [
-          {
-            type: "string",
-            required: true,
-            message: "输入时间",
-            trigger: "blur"
-          }
         ]
       },
       /*修改验证*/
@@ -279,14 +254,6 @@ export default {
             trigger: "blur"
           }
         ],
-        userId: [
-          {
-            type: "string",
-            required: true,
-            message: "输入管理人",
-            trigger: "blur"
-          }
-        ],
         createtime: [
           {
             type: "string",
@@ -297,7 +264,7 @@ export default {
         ]
       },
       /*菜单列表*/
-      workspaceList: [],
+      adminList: [],
       /*生产类型表显示字段*/
       columns1: [
         {
@@ -327,11 +294,11 @@ export default {
         },
         {
           title: "管理人",
-          key: "userId"
+          key: "userName"
         },
         {
           title: "创建时间",
-          key: "create_time"
+          key: "createtime"
         }
       ],
       /*生产类型表数据*/
@@ -346,18 +313,16 @@ export default {
     });
     this.axios({
       method: "get",
-      url: "/menus",
+      url: "/getAdmin",
       params: {
-        page: e.pageInfo.page,
-        pageSize: e.pageInfo.pageSize,
-        menuId: e.menuId
+        usertype: 1
       }
     })
       .then(
         function(response) {
           var listTemp = response.data.data;
           for (var i = 0; i < listTemp.length; i++) {
-            this.workspaceList.push({
+            this.adminList.push({
               value: listTemp[i].id,
               label: listTemp[i].name
             });
@@ -365,7 +330,7 @@ export default {
         }.bind(this)
       )
       .catch(function(error) {
-        alert(error);
+        alert("管理人为空");
       });
   },
   methods: {
@@ -434,6 +399,25 @@ export default {
       this.workspaceModify.userId = e.userId;
       this.workspaceModify.createtime = e.createtime;
     },
+    dateGet(e) {
+      var time = new Date(parseInt(e));
+      return (
+        time.getFullYear() +
+        "-" +
+        (time.getMonth() + 1) +
+        "-" +
+        time.getDate() +
+        " " +
+        time.getHours() +
+        ":" +
+        time.getMinutes()
+      );
+    },
+    listDateSet(e) {
+      for (var i = e.length - 1; i >= 0; i--) {
+        e[i].createtime = this.dateGet(e[i].createtime);
+      }
+    },
     /*得到表数据*/
     getTable(e) {
       this.axios({
@@ -448,6 +432,7 @@ export default {
         .then(
           function(response) {
             this.data1 = response.data.data.data;
+            this.listDateSet(this.data1);
             this.total = response.data.data.totalCount;
           }.bind(this)
         )

@@ -74,14 +74,13 @@
           </Col>
           <Col span="12">
             <Form-item label="管理人:" prop="userId">
-              <Input v-model="assetsNew.userId" style="width: 204px" />
-              <!-- <Select v-model="assetsNew" filterable clearable style="width: 200px">
+              <Select v-model="assetsNew.userId" filterable clearable style="width: 200px">
                 <Option
                   v-for="item in assetsList"
                   :value="item.value"
                   :key="item.value"
                 >{{ item.label }}</Option>
-              </Select>-->
+              </Select>
             </Form-item>
           </Col>
         </Row>
@@ -126,7 +125,13 @@
           </Col>
           <Col span="12">
             <Form-item label="管理人:" prop="userId">
-              <Input v-model="assetsModify.userId" style="width: 204px" />
+              <Select v-model="assetsModify.userId" filterable clearable style="width: 200px">
+                <Option
+                  v-for="item in assetsList"
+                  :value="item.value"
+                  :key="item.value"
+                >{{ item.label }}</Option>
+              </Select>
             </Form-item>
           </Col>
         </Row>
@@ -225,19 +230,6 @@ export default {
             trigger: "blur"
           }
         ],
-        userId: [
-          { required: true, message: "输入管理人", trigger: "blur" },
-          {
-            validator(rule, value, callback) {
-              if (!Number.isInteger(+value)) {
-                callback(new Error("请输入数字"));
-              } else {
-                callback();
-              }
-            },
-            trigger: "blur"
-          }
-        ],
         abrasion: [
           { required: true, message: "输入损坏程度", trigger: "blur" },
           {
@@ -272,19 +264,6 @@ export default {
         ],
         number: [
           { required: true, message: "输入财产数量", trigger: "blur" },
-          {
-            validator(rule, value, callback) {
-              if (!Number.isInteger(+value)) {
-                callback(new Error("请输入数字"));
-              } else {
-                callback();
-              }
-            },
-            trigger: "blur"
-          }
-        ],
-        userId: [
-          { required: true, message: "输入管理人", trigger: "blur" },
           {
             validator(rule, value, callback) {
               if (!Number.isInteger(+value)) {
@@ -341,7 +320,7 @@ export default {
         },
         {
           title: "管理人",
-          key: "userId"
+          key: "userName"
         },
         {
           title: "创建时间",
@@ -360,10 +339,9 @@ export default {
     });
     this.axios({
       method: "get",
-      url: "/assets",
+      url: "/getAdmin",
       params: {
-        page: e.pageInfo.page,
-        pageSize: e.pageInfo.pageSize
+        usertype: 1
       }
     })
       .then(
@@ -447,6 +425,25 @@ export default {
       this.assetsModify.userId = e.userId;
       this.assetsModify.createTime = e.createTime;
     },
+    dateGet(e) {
+      var time = new Date(parseInt(e));
+      return (
+        time.getFullYear() +
+        "-" +
+        (time.getMonth() + 1) +
+        "-" +
+        time.getDate() +
+        " " +
+        time.getHours() +
+        ":" +
+        time.getMinutes()
+      );
+    },
+    listDateSet(e) {
+      for (var i = e.length - 1; i >= 0; i--) {
+        e[i].createTime = this.dateGet(e[i].createTime);
+      }
+    },
     /*得到表数据*/
     getTable(e) {
       this.axios({
@@ -461,6 +458,7 @@ export default {
         .then(
           function(response) {
             this.data1 = response.data.data.data;
+            this.listDateSet(this.data1);
             this.total = response.data.data.totalCount;
           }.bind(this)
         )

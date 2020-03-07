@@ -8,19 +8,27 @@
 		<result column="address" property="address" />
 		<result column="uid" property="uid" />
 		<result column="userId" property="userId" />
+		<result column="userName" property="userName"/>
 		<result column="createtime" property="createtime" />
 	</resultMap>
 
 	<!-- 获取workspace列表 -->
 	<select id="workspacesList" resultMap="workspaceMap">
-		select * from workspace
+		SELECT w.*,u.name userName from workspace w, sys_user u
+		<where>
+			w.userid = u.id
+		</where>
+		ORDER BY w.id
 		<if test="pageSize != null and start != null ">
 			limit #{start},#{pageSize}
 		</if>
 	</select>
 	<!-- 获取workspace列表的总量 -->
 	<select id="workspaceSize" resultType="Integer">
-	    <![CDATA[select count(*) from workspace]]>
+	    <![CDATA[select count(*) from workspace w, sys_user u]]>
+		<where>
+			w.userid = u.id
+		</where>
 	</select>
 	<!--新建workspace-->
 	<insert id="insertWorkspace">
@@ -49,7 +57,7 @@
 		`desc` = #{workspaceEntity.desc},
 		address = #{workspaceEntity.address},
 		uid = #{workspaceEntity.uid},
-		userId =
+		userid =
 		#{workspaceEntity.userId},
 		createtime = #{workspaceEntity.createtime}
 		<where>
@@ -65,13 +73,18 @@
 		<result column="uid" property="uid" />
 		<result column="workspaceId" property="workspaceId" />
 		<result column="userId" property="userId" />
+		<result column="userName" property="userName"/>
 		<result column="number" property="number" />
 		<result column="abrasion" property="abrasion" />
 		<result column="createTime" property="createTime" />
 	</resultMap>
 
 	<select id="assetsList" resultMap="assetsMap">
-		select * from assets
+		SELECT a.*,u.`name` userName from assets a,sys_user u
+		<where>
+			a.userid = u.id
+		</where>
+		ORDER BY a.id
 		<if test="pageSize != null and start != null ">
 			limit #{start},#{pageSize}
 		</if>
@@ -79,15 +92,18 @@
 	<!-- 获取assets列表的总量 -->
 	<select id="assetsSize" resultType="Integer">
 	    <![CDATA[
-        select count(*) from assets
+        select count(*) from assets a,sys_user u
         ]]>
+		<where>
+			a.userid = u.id
+		</where>
 	</select>
     <!--新建assets-->
     <insert id="insertAssets">
 		insert into assets
-		(name,type,userid,number,abrasion)
+		(name,type,userid,number,abrasion,create_time)
 		values
-		(#{assetsEntity.name},#{assetsEntity.type},#{assetsEntity.userId},#{assetsEntity.number},#{assetsEntity.abrasion})
+		(#{assetsEntity.name},#{assetsEntity.type},#{assetsEntity.userId},#{assetsEntity.number},#{assetsEntity.abrasion},#{assetsEntity.createTime})
 	</insert>
     <delete id="deleteAssets">
         delete from assets

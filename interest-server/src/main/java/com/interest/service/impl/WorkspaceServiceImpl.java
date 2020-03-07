@@ -4,6 +4,7 @@ import com.interest.dao.WorkspaceDao;
 import com.interest.model.entity.AssetsEntity;
 import com.interest.model.entity.WorkspaceEntity;
 import com.interest.service.WorkspaceService;
+import com.interest.utils.DateUtil;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Override
     public void insertWorkspace(WorkspaceEntity workspaceEntity) {
+        workspaceEntity.setCreatetime(DateUtil.currentTimestamp());
         workspaceDao.insertWorkspace(workspaceEntity);
     }
 
@@ -58,6 +60,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Override
     public void insertAssets(AssetsEntity assetsEntity) {
+        assetsEntity.setCreateTime(DateUtil.currentTimestamp());
         workspaceDao.insertAssets(assetsEntity);
     }
 

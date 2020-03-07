@@ -105,7 +105,8 @@
         sex = #{sex},
         age = #{age},
         college = #{college},
-        info = #{info}
+        info = #{info},
+        workspaceId = #{workspaceId}
         <where>
             login_name = #{loginName}
         </where>
@@ -121,7 +122,8 @@
 
     <update id="updateUsertypeById">
         update sys_user set
-        usertype = #{usertype}
+        usertype = #{usertype},
+        workspaceId = #{workspaceId}
         <where>
             id = #{id}
         </where>
@@ -210,5 +212,12 @@
             id = #{id}
         </where>
     </update>
+
+    <select id="getAdminList" resultMap="userMap">
+        SELECT * from sys_user
+        <where>
+            usertype = #{usertype}
+        </where>
+    </select>
 
 </mapper>

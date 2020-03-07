@@ -69,4 +69,10 @@ public interface UserService {
 
     void updateUserUrl(int id);
 
+	/**
+	 * 查询管理员列表
+	 * @param usertype
+	 * @return
+	 */
+	List<UserEntity> getAdminList(int usertype);
 }
